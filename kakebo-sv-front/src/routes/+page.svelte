@@ -1,5 +1,4 @@
 <script>
-    import {Table} from "@skeletonlabs/skeleton";
 </script>
 
 <div class="container h-full mx-auto flex flex-row justify-center items-center">
@@ -90,17 +89,6 @@
 <style lang="postcss">
     figure {
         @apply flex relative flex-col;
-    }
-
-    figure svg,
-    .img-bg {
-        @apply w-64 h-64 md:w-80 md:h-80;
-    }
-
-    .img-bg {
-        @apply absolute z-[-1] rounded-full blur-[50px] transition-all;
-        animation: pulse 5s cubic-bezier(0, 0, 0, 0.5) infinite,
-        glow 5s linear infinite;
     }
 
     @keyframes glow {
