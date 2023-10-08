@@ -13,7 +13,7 @@
     "format": "prettier --plugin-search-dir . --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install kakebo-sv-front/.husky"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
