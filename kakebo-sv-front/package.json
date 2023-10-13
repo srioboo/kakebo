@@ -12,8 +12,7 @@
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest",
-    "prepare": "cd .. && husky install kakebo-sv-front/.husky"
+    "test:unit": "vitest"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
@@ -30,7 +29,6 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte": "^2.30.0",
-    "husky": "^8.0.3",
     "postcss": "8.4.30",
     "prettier": "^2.8.0",
     "prettier-plugin-svelte": "^2.10.1",
