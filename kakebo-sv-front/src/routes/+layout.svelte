@@ -63,18 +63,18 @@
 				<AppRailAnchor href="/">(icon)</AppRailAnchor>
 			</svelte:fragment>
 			<!-- --- -->
-			<AppRailTile bind:group={currentTile} name="tile-1" value={0} title="tile-1">
+			<AppRailAnchor href="/" title="tile-1">
 				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>Tile 1</span>
-			</AppRailTile>
-			<AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
+				<span>General</span>
+			</AppRailAnchor>
+			<AppRailAnchor href="/diario" title="tile-2">
 				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>Tile 2</span>
-			</AppRailTile>
-			<AppRailTile bind:group={currentTile} name="tile-3" value={2} title="tile-3">
+				<span>Diario</span>
+			</AppRailAnchor>
+			<AppRailAnchor href="/resumen" title="tile-3">
 				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>Tile 3</span>
-			</AppRailTile>
+				<span>Resumen</span>
+			</AppRailAnchor>
 			<!-- --- -->
 			<svelte:fragment slot="trail">
 				<AppRailAnchor href="/" target="_blank" title="Account">(icon)</AppRailAnchor>
