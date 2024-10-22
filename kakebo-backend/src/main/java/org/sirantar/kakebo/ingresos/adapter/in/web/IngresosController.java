@@ -1,4 +1,4 @@
-package org.sirantar.kakebo.ingresos.infraestruture;
+package org.sirantar.kakebo.ingresos.adapter.in.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
