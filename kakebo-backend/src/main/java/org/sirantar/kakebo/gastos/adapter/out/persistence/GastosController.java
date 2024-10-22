@@ -1,4 +1,4 @@
-package org.sirantar.kakebo.gastos.infrastructure;
+package org.sirantar.kakebo.gastos.adapter.out.persistence;
 
 import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.GetMapping;
