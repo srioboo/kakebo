@@ -1,5 +1,11 @@
 create table expenses(
 	id int,
-	gasto int,
-	nombreGasto varchar(256),
-)
+	amount int,
+	expense varchar(256)
+);
+
+create table income(
+	 id int,
+	 amount int,
+	 income varchar(256)
+);
