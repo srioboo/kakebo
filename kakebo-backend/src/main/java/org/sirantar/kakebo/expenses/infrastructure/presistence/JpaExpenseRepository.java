@@ -7,6 +7,7 @@ import org.sirantar.kakebo.expenses.domain.repository.ExpensesRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JpaExpenseRepository implements ExpensesRepository {
@@ -21,8 +22,8 @@ public class JpaExpenseRepository implements ExpensesRepository {
 	}
 
 	@Override
-	public Expenses findById(Long id) {
-		return null;
+	public Optional<Expenses> findById(Long id) {
+		return Optional.ofNullable(entityManager.find(Expenses.class, 1L));
 	}
 
 	@Override
