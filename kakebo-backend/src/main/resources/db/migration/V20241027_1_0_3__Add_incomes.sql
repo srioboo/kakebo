@@ -1,0 +1,2 @@
+INSERT INTO T_INCOMES (ID, AMOUNT, INCOME) values (1, 10, 'ingeso1');
+INSERT INTO T_INCOMES (ID, AMOUNT, INCOME) values (2, 20, 'ingreso2');

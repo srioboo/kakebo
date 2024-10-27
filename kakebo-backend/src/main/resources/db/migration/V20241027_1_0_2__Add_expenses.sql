@@ -1,0 +1,2 @@
+INSERT INTO T_EXPENSES (ID, AMOUNT, EXPENSE) values (1, 10, 'gasto1');
+INSERT INTO T_EXPENSES (ID, AMOUNT, EXPENSE) values (2, 20, 'gasto2');
