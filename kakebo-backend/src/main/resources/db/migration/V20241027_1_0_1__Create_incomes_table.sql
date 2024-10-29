@@ -1,5 +1,6 @@
 create table if not exists T_INCOMES(
-						  ID integer,
-						  AMOUNT int,
-						  INCOME varchar(256)
+	ID integer,
+	AMOUNT numeric,
+	INCOME_NAME varchar(256),
+	INCOME_DATE timestamp
 );
