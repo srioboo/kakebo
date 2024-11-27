@@ -19,18 +19,11 @@ public class ExpensesService {
 	}
 
 
-	public List<ExpenseDTO> getExpenses(){
-
-		List<ExpenseDTO> result = new ArrayList<>();
-
-		// TODO - get from respository
-		result.add(new ExpenseDTO(1));
-
-		return result;
+	public List<Expenses> getExpenses(){
+		return expensesRepository.findAll();
 	}
-
-	public ExpenseDTO getExpenseById(Long id){
+	public Expenses getExpenseById(Long id){
 		Optional<Expenses> expenses = expensesRepository.findById(id);
-		return expenses.map(value -> new ExpenseDTO(value.getId())).orElseGet(() -> new ExpenseDTO(1));
+		return expenses.orElse(new Expenses());
 	}
 }
