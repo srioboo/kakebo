@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "T_EXPENSES")
+@Table(name = "t_expenses")
 public class Expenses {
 
 	@Id
@@ -25,4 +25,29 @@ public class Expenses {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public String getExpenseName() {
+		return expenseName;
+	}
+
+	public void setExpenseName(String expenseName) {
+		this.expenseName = expenseName;
+	}
+
+	public LocalDateTime getExpenseDate() {
+		return expenseDate;
+	}
+
+	public void setExpenseDate(LocalDateTime expenseDate) {
+		this.expenseDate = expenseDate;
+	}
+
 }
