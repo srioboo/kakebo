@@ -2,7 +2,6 @@ package org.sirantar.kakebo.income.infrastructure.persistence;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.sirantar.kakebo.income.domain.model.Income;
 import org.sirantar.kakebo.income.domain.repository.IncomeRepository;
 import org.springframework.stereotype.Repository;
