@@ -1,9 +1,7 @@
 package org.sirantar.kakebo.expenses.infrastructure.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.server.PathParam;
-import org.sirantar.kakebo.expenses.application.dto.ExpenseDTO;
 import org.sirantar.kakebo.expenses.application.service.ExpensesService;
 import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +19,15 @@ public class ExpensesController {
 	private final ExpensesService expensesService;
 
 	@Autowired
-	public ExpensesController(ExpensesService expensesService){
+	public ExpensesController(ExpensesService expensesService) {
 		this.expensesService = expensesService;
 	}
 
-    @GetMapping(path = "/expenses")
-    public List<Expenses> getExpenses() {
+	@GetMapping(path = "/expenses")
+	public List<Expenses> getExpenses() {
 		// TODO - use DTO and conversors
 		return expensesService.getExpenses();
-    }
+	}
 
 	@GetMapping(path = "/expenses/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Expenses getExpenseById(@PathParam("id") Long id) throws JsonProcessingException {

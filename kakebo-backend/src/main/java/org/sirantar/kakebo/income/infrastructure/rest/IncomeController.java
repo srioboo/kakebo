@@ -21,13 +21,13 @@ public class IncomeController {
 		this.incomeService = incomeService;
 	}
 
-    @GetMapping("/incomes")
-    public List<Income> getIncomes(){
+	@GetMapping("/incomes")
+	public List<Income> getIncomes() {
 		return incomeService.getIncomes();
-    }
+	}
 
 	@GetMapping("/incomes/{id}")
-	public Income getIncome(@PathVariable Long id){
+	public Income getIncome(@PathVariable Long id) {
 		return incomeService.getIncome(id);
 	}
 }
