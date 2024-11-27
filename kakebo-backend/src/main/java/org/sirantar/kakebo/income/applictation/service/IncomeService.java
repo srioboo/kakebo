@@ -3,18 +3,27 @@ package org.sirantar.kakebo.income.applictation.service;
 import org.sirantar.kakebo.income.applictation.dto.IncomeDTO;
 import org.sirantar.kakebo.income.domain.model.Income;
 import org.sirantar.kakebo.income.domain.repository.IncomeRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class IncomeService {
 
-	private IncomeRepository incomeRepository;
+	private final IncomeRepository incomeRepository;
 
 	public IncomeService(IncomeRepository incomeRepository){
 		this.incomeRepository = incomeRepository;
 	}
 
-	public IncomeDTO getIncome(Long id){
-		Income income = incomeRepository.findById(id);
-		return new IncomeDTO(null, null, null);
+	public List<Income> getIncomes() {
+		return incomeRepository.findAll();
+	}
+
+	public Income getIncome(Long id){
+		Optional<Income> result = incomeRepository.findById(id);
+		return result.orElse(new Income());
 	}
 
 }
