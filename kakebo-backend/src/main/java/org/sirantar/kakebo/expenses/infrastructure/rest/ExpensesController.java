@@ -1,6 +1,8 @@
 package org.sirantar.kakebo.expenses.infrastructure.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.websocket.server.PathParam;
 import org.sirantar.kakebo.expenses.application.service.ExpensesService;
 import org.sirantar.kakebo.expenses.domain.model.Expenses;
@@ -30,7 +32,11 @@ public class ExpensesController {
 	}
 
 	@GetMapping(path = "/expenses/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Expenses getExpenseById(@PathParam("id") Long id) throws JsonProcessingException {
+	@Operation(summary = "Get one determined expense", description = "Get all the data related with the expense given in the parameter")
+	public Expenses getExpenseById(
+		@PathParam("id")
+		@Parameter(name = "id", description = "Value of the expernse identifier ", example = "1")
+		Long id) throws JsonProcessingException {
 		// TODO - use DTO and conversors
 		// ObjectMapper om = new ObjectMapper();
 		return expensesService.getExpenseById(id);
