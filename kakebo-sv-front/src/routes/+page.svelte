@@ -1,5 +1,7 @@
-<script>
-	export let expenses;
+<script lang="ts">
+	export let data;
+ 	// const { posts, error } = data;
+	const { expenses, error } = data;
 </script>
 
 <div class="container h-full mx-auto flex flex-row justify-center items-center">
@@ -19,14 +21,16 @@
 				</thead>
 				<tbody>
 
-					{#if expenses}
+					{#if data}
 						<tr>
-							<td> Esto es una prueba '{expenses}'</td>
+							<td> Test Api '{expenses?.data.id}'</td>
+							<td> Test Api '{expenses?.data.amount}'</td>
+							<td> Test Api '{expenses?.data.expenseName}'</td>
 						</tr>
 					{:else}
 						 <!-- else content here -->
 						  <tr>
-							<td>No se ha econtrado nada</td>
+							<td>No data found!</td>
 						  </tr>
 						 <!-- else content here -->
 					{/if}
@@ -94,9 +98,9 @@
 </div>
 
 <style lang="postcss">
-	figure {
+	/* figure {
 		@apply flex relative flex-col;
-	}
+	} */
 
 	@keyframes glow {
 		0% {
