@@ -23,7 +23,7 @@
 		<!-- App Bar -->
 		<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
 			<svelte:fragment slot="lead">
-				<i class="fa-solid fa-bars text-2xl" />
+				<i class="fa-solid fa-bars text-2xl"></i>
 			</svelte:fragment>
 			<strong class="text-xl uppercase">Kakebo</strong>
 			<svelte:fragment slot="trail">
