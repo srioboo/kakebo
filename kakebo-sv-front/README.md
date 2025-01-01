@@ -6,7 +6,7 @@ Everything you need to build a Svelte project, powered by [`create-svelte`](http
 
 If you're seeing this, you've probably already done this step. Congrats!
 
-```bash
+```shell
 # create a new project in the current directory
 npm create svelte@latest
 
@@ -18,7 +18,7 @@ npm create svelte@latest my-app
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-```bash
+```shell
 npm run dev
 
 # or start the server and open the app in a new browser tab
@@ -29,8 +29,19 @@ npm run dev -- --open
 
 To create a production version of your app:
 
-```bash
+```shell
 npm run build
+```
+
+### Bun
+
+with bun use
+
+```shell
+bun run dev
+
+# to install dependencies
+bun install
 ```
 
 You can preview the production build with `npm run preview`.
