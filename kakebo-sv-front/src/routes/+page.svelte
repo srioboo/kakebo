@@ -1,4 +1,5 @@
 <script>
+	export let expenses;
 </script>
 
 <div class="container h-full mx-auto flex flex-row justify-center items-center">
@@ -17,6 +18,19 @@
 					</tr>
 				</thead>
 				<tbody>
+
+					{#if expenses}
+						<tr>
+							<td> Esto es una prueba '{expenses}'</td>
+						</tr>
+					{:else}
+						 <!-- else content here -->
+						  <tr>
+							<td>No se ha econtrado nada</td>
+						  </tr>
+						 <!-- else content here -->
+					{/if}
+
 					<tr>
 						<td>12/03/2023</td>
 						<td>Sueldo</td>
