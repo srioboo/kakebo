@@ -16,8 +16,7 @@ public class ExpensesService {
 		this.expensesRepository = expensesRepository;
 	}
 
-
-	public List<Expenses> getExpenses() {
+	public Iterable<Expenses> getExpenses() {
 		return expensesRepository.findAll();
 	}
 

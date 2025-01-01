@@ -8,6 +8,7 @@ import org.sirantar.kakebo.expenses.application.service.ExpensesService;
 import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,9 @@ public class ExpensesController {
 	}
 
 	@GetMapping(path = "/expenses")
-	public List<Expenses> getExpenses() {
+	public ResponseEntity<Iterable<Expenses>> getExpenses() {
 		// TODO - use DTO and conversors
-		return expensesService.getExpenses();
+		return ResponseEntity.ok(expensesService.getExpenses());
 	}
 
 	@GetMapping(path = "/expenses/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

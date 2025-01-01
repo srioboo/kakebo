@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let data;
  	// const { posts, error } = data;
-	const { expenses, error } = data;
+	const { expenses, incomes, error } = data;
 </script>
 
 <div class="container h-full mx-auto flex flex-row justify-center items-center">
@@ -14,32 +14,27 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Fecha</th>
+						<th>Id</th>
 						<th>Concepto</th>
 						<th>Importe</th>
+						<th>Fecha</th>
 					</tr>
 				</thead>
 				<tbody>
-
 					{#if data}
-						<tr>
-							<td> Test Api '{expenses?.data.id}'</td>
-							<td> Test Api '{expenses?.data.amount}'</td>
-							<td> Test Api '{expenses?.data.expenseName}'</td>
-						</tr>
+						{#each incomes?.data as income}
+							<tr>
+								<td>{income?.id}</td>
+								<td>{income?.incomeName}</td>
+								<td>{income?.amount}</td>
+								<td>{income?.incomeDate}</td>
+							</tr>
+						{/each}
 					{:else}
-						 <!-- else content here -->
 						  <tr>
 							<td>No data found!</td>
 						  </tr>
-						 <!-- else content here -->
 					{/if}
-
-					<tr>
-						<td>12/03/2023</td>
-						<td>Sueldo</td>
-						<td>2.400 €</td>
-					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
@@ -55,17 +50,28 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<th>Id</th>
 						<th>Fecha</th>
 						<th>Concepto</th>
 						<th>Importe</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>12/03/2023</td>
-						<td>Hipoteca</td>
-						<td>400 €</td>
-					</tr>
+
+				{#if data}
+					{#each expenses?.data as expense}
+						<tr>
+							<td>{expense?.id}</td>
+							<td>{expense?.expenseName}</td>
+							<td>{expense?.amount}</td>
+							<td>{expense?.expenseDate}</td>
+						</tr>
+					{/each}
+				{:else}
+						<tr>
+						<td>No data found!</td>
+						</tr>
+				{/if}
 				</tbody>
 				<tfoot>
 					<tr>
