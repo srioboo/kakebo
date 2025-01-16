@@ -17,6 +17,16 @@ public class Incomes {
 	String incomeName;
 	LocalDateTime incomeDate;
 
+	public Incomes() {
+	}
+
+	public Incomes(Integer id, BigDecimal amount, String incomeName, LocalDateTime incomeDate) {
+		this.id = id;
+		this.amount = amount;
+		this.incomeName = incomeName;
+		this.incomeDate = incomeDate;
+	}
+
 	public Integer getId() {
 		return id;
 	}
