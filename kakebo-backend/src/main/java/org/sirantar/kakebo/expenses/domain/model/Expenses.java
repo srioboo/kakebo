@@ -17,6 +17,16 @@ public class Expenses {
 	String expenseName;
 	LocalDateTime expenseDate;
 
+	public Expenses() {
+	}
+
+	public Expenses(Integer id, BigDecimal amount, String expenseName, LocalDateTime expenseDate) {
+		this.id = id;
+		this.amount = amount;
+		this.expenseName = expenseName;
+		this.expenseDate = expenseDate;
+	}
+
 	public Integer getId() {
 		return id;
 	}

@@ -20,7 +20,6 @@ public class IncomeJsonTest {
 	private static final Incomes INCOME = new Incomes(1, BigDecimal.valueOf(10), "income 1",
 		LocalDateTime.of(2025, 1, 1, 0, 0));
 
-	// TODO add json
 	private static final String JSON_INCOME = """
 		  {
 			"id": 1,
