@@ -37,7 +37,3 @@ src
     - also test that the 8080 port it not in use
 2. Complains about gradle version with jdk 22, gradle not works con 22, use 21
 
-**Ref:**
-- https://refactorizando.com/ejemplo-de-arquitectura-hexagonal/
-- https://www.baeldung.com/hexagonal-architecture-ddd-spring
-- https://dev.to/dyarleniber/hexagonal-architecture-and-clean-architecture-with-examples-48oi
