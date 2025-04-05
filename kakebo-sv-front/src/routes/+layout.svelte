@@ -1,87 +1,105 @@
 <script lang="ts">
-	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
-
-	// Floating UI for Popups
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-
+	import '../app.css';
+	import { AppBar, Navigation } from '@skeletonlabs/skeleton-svelte';
+	// delete Floating UI for Popups
+	// import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	// Font Awesome
 	import '@fortawesome/fontawesome-free/css/fontawesome.css';
 	import '@fortawesome/fontawesome-free/css/brands.css';
 	import '@fortawesome/fontawesome-free/css/solid.css';
+	// import IconFolder from '@lucide/svelte/icons/folder';
+	import { Menu, Folder, CircleHelp } from '@lucide/svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	let { children }: Props = $props();
+
+	// storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	let currentTile: number = 0;
 </script>
 
 <!-- App Shell -->
-<AppShell>
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
-			<svelte:fragment slot="lead">
-				<i class="fa-solid fa-bars text-2xl"></i>
-			</svelte:fragment>
-			<strong class="text-xl uppercase">Kakebo</strong>
-			<svelte:fragment slot="trail">
-				<!-- <a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://discord.gg/EXqV7W8MtY"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Discord
-				</a>
-				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://twitter.com/SkeletonUI"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Twitter
-				</a>
-				<a
-					class="btn btn-sm variant-ghost-surface"
-					href="https://github.com/skeletonlabs/skeleton"
-					target="_blank"
-					rel="noreferrer"
-				>
-					GitHub
-				</a> -->
-				<a class="btn btn-sm variant-ghost-surface" href="ayuda" rel="noreferrer"> Ayuda </a>
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
+<div class="grid h-screen grid-rows-[auto_1fr_auto]">
+	<!-- {#snippet header()} -->
+	
+			<!-- App Bar -->
+			<AppBar headlineClasses="sm:hidden" centerClasses="hidden sm:block">
+				{#snippet lead()}
+						<Menu size={26} font-weight={900}/>
+				{/snippet}
+				{#snippet headline()}
+				<h1 class="h1">Kakebo</h1>
+				{/snippet}
+				<span class="h4">Kakebo</span>
+				{#snippet trail()}
+					
+						<!-- <a
+							class="btn btn-sm variant-ghost-surface"
+							href="https://discord.gg/EXqV7W8MtY"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Discord
+						</a>
+						<a
+							class="btn btn-sm variant-ghost-surface"
+							href="https://twitter.com/SkeletonUI"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Twitter
+						</a>
+						<a
+							class="btn btn-sm variant-ghost-surface"
+							href="https://github.com/skeletonlabs/skeleton"
+							target="_blank"
+							rel="noreferrer"
+						>
+							GitHub
+						</a> -->
+						<a href="ayuda" rel="noreferrer">
+							<CircleHelp href="ayuda" />
+						</a>
+						
+					
+				{/snippet}
+			</AppBar>
+		
+	<!-- {/snippet} -->
 
 	<!-- App Rail -->
-	<svelte:fragment slot="sidebarLeft">
-		<AppRail>
-			<svelte:fragment slot="lead">
-				<AppRailAnchor href="/">(icon)</AppRailAnchor>
-			</svelte:fragment>
+	<!-- {#snippet sidebarLeft()} -->
+	<div class="grid grid-cols-1 md:grid-cols-[auto_1fr]">
+		<Navigation.Rail>
+			{#snippet header()}
+				<Navigation.Tile label="Inicio" href="/">
+					<Folder />
+				</Navigation.Tile>
+			{/snippet}
 			<!-- --- -->
-			<AppRailAnchor href="/" title="tile-1">
-				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>General</span>
-			</AppRailAnchor>
-			<AppRailAnchor href="/diario" title="tile-2">
-				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>Diario</span>
-			</AppRailAnchor>
-			<AppRailAnchor href="/resumen" title="tile-3">
-				<svelte:fragment slot="lead">(icon)</svelte:fragment>
-				<span>Resumen</span>
-			</AppRailAnchor>
+			{#snippet tiles()}
+			<Navigation.Tile label="General" href="/" title="tile-1">
+				<Folder />
+			</Navigation.Tile>
+			<Navigation.Tile label="Diario" href="/diario" title="tile-2">
+				<Folder />
+			</Navigation.Tile>
+			<Navigation.Tile label="Resumen" href="/resumen" title="tile-3">
+				<Folder />
+			</Navigation.Tile>
+			{/snippet}
 			<!-- --- -->
-			<svelte:fragment slot="trail">
-				<AppRailAnchor href="/" target="_blank" title="Account">(icon)</AppRailAnchor>
-			</svelte:fragment>
-		</AppRail>
-	</svelte:fragment>
-
-	<!-- Page Route Content -->
-	<slot />
-</AppShell>
+			{#snippet footer()}
+				<Navigation.Tile href="/ayuda" target="_blank" title="Account">
+					<Folder />
+				</Navigation.Tile>
+			{/snippet}
+		</Navigation.Rail>
+	
+		<!-- Page Route Content -->
+		{@render children?.()}
+	</div>
+	<!-- {/snippet} -->
+</div>

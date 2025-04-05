@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let data;
+	let { data } = $props();
  	// const { posts, error } = data;
 	const { expenses, incomes, error } = data;
 </script>
@@ -11,7 +11,7 @@
 		<!-- Tabla de ingresos -->
 		<div class="table-container">
 			<div class="border-1 border-white p-5 font-extrabold">Ingresos</div>
-			<table class="table table-hover">
+			<table class="table ">
 				<thead>
 					<tr>
 						<th>Id</th>
@@ -47,7 +47,7 @@
 		<!-- Tabla de gastos -->
 		<div class="table-container">
 			<div class="border-1 border-white p-5 font-extrabold">Gatos fijos (estimados)</div>
-			<table class="table table-hover">
+			<table class="table ">
 				<thead>
 					<tr>
 						<th>Id</th>
@@ -104,11 +104,10 @@
 </div>
 
 <style lang="postcss">
-	/* figure {
-		@apply flex relative flex-col;
-	} */
+	@reference "tailwindcss";
+	@reference "../app.css";
 
-	@keyframes glow {
+	/*@keyframes glow {
 		0% {
 			@apply bg-primary-400/50;
 		}
@@ -127,5 +126,5 @@
 		50% {
 			transform: scale(1.5);
 		}
-	}
+	}*/
 </style>
