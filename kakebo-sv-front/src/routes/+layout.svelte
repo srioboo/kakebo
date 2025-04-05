@@ -21,11 +21,16 @@
 </script>
 
 <!-- App Shell -->
-<div class="grid h-screen grid-rows-[auto_1fr_auto]">
+<div class="w-full flex flex-col bg-surface-100-900 space-y-4 p-4">
 	<!-- {#snippet header()} -->
 	
 			<!-- App Bar -->
-			<AppBar headlineClasses="sm:hidden" centerClasses="hidden sm:block">
+			<AppBar headlineClasses="sm:hidden flex-auto place-self-center" 
+				leadClasses="app-bar-slot-lead flex-none flex justify-between items-center " 
+				centerClasses="hidden sm:block"
+				trailClasses="app-bar-slot-trail flex-none flex items-center space-x-4 place-content-end">
+
+				
 				{#snippet lead()}
 						<Menu size={26} font-weight={900}/>
 				{/snippet}
