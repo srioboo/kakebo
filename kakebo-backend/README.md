@@ -1,10 +1,51 @@
 # Kakebo Backend
 
-Kakebo personal finances project backend
+Kakebo personal finances project backend - Spring Boot 4.x con arquitectura hexagonal.
 
-## Maven Commands
+**🚀 [Ir a Documentación →](docs/00_INDEX.md)**
 
-Here are some useful commands for building, testing, and running the project:
+## Inicio Rápido
+
+```bash
+./mvnw spring-boot:run -Dspring.profiles.active=dev
+```
+
+Luego abre: http://localhost:9090/swagger-ui.html
+
+## Comandos Rápidos
+
+```bash
+make help               # Ver todos los comandos
+make start              # Iniciar aplicación
+make test               # Ejecutar tests
+make lint               # Análisis de código (SonarQube)
+make coverage           # Cobertura de tests
+```
+
+---
+
+## 📚 Documentación
+
+Toda la documentación está organizada en la carpeta [`docs/`](docs/00_INDEX.md):
+
+| Tema | Descripción |
+|------|-------------|
+| [🚀 Inicio Rápido](docs/01-Inicio-inicio-rapido.md) | Ejecuta la app en 30 segundos |
+| [🏗️ Arquitectura](docs/02-Arquitectura-hexagonal-patrones.md) | Estructura hexagonal y patrones |
+| [🔧 Desarrollo](docs/03-Desarrollo-entornos-configuracion.md) | Entornos, configuración, Docker |
+| [🧪 Testing](docs/04-Testing-patrones-errores-comunes.md) | Tests, errores comunes |
+| [📊 Calidad](docs/05-CalidadCodigo-sonarqube-cobertura.md) | SonarQube, cobertura |
+| [🎨 Referencia](docs/06-Referencia-diagramas-visuales.md) | Diagramas visuales |
+
+**[→ Ver Índice Completo](docs/00_INDEX.md)**
+
+---
+
+## Para Agentes IA
+
+Ver [AGENTS.md](AGENTS.md) para instrucciones especializadas para agentes de IA que trabajan en este proyecto.
+
+---
 
 ## Unified Script: `manage.sh`, Make, and Just
 
