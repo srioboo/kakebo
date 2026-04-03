@@ -6,10 +6,8 @@
 </script>
 
 <ParaglideJS {i18n}>
-	{@render children()}
-</ParaglideJS>
-<!-- App Shell -- TODO create component  -->
-<AppShell>
+	<!-- App Shell -- TODO create component  -->
+	<AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -- TODO create component  -->
 		<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
@@ -73,6 +71,7 @@
 		</AppRail>
 	</svelte:fragment>
 
-	<!-- Page Route Content -->
-	<slot />
-</AppShell>
+		<!-- Page Route Content -->
+		{@render children()}
+	</AppShell>
+</ParaglideJS>
