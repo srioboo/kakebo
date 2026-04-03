@@ -2,7 +2,7 @@ package org.sirantar.kakebo.income.infrastructure.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import org.sirantar.kakebo.income.applictation.service.IncomeService;
+import org.sirantar.kakebo.income.application.service.IncomeService;
 import org.sirantar.kakebo.income.domain.model.Incomes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
