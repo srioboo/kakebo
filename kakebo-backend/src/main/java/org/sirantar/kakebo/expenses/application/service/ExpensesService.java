@@ -4,7 +4,6 @@ import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.sirantar.kakebo.expenses.domain.repository.ExpensesRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +22,31 @@ public class ExpensesService {
 	public Expenses getExpenseById(Long id) {
 		Optional<Expenses> expenses = expensesRepository.findById(id);
 		return expenses.orElse(new Expenses());
+	}
+
+	public Expenses createExpense(Expenses expenses) {
+		return expensesRepository.save(expenses);
+	}
+
+	public Expenses updateExpense(Long id, Expenses expenses) {
+		Optional<Expenses> existingExpense = expensesRepository.findById(id);
+		if (existingExpense.isPresent()) {
+			Expenses expense = existingExpense.get();
+			if (expenses.getAmount() != null) {
+				expense.setAmount(expenses.getAmount());
+			}
+			if (expenses.getExpenseName() != null) {
+				expense.setExpenseName(expenses.getExpenseName());
+			}
+			if (expenses.getExpenseDate() != null) {
+				expense.setExpenseDate(expenses.getExpenseDate());
+			}
+			return expensesRepository.save(expense);
+		}
+		return null;
+	}
+
+	public void deleteExpense(Long id) {
+		expensesRepository.deleteById(id);
 	}
 }

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExpenseJsonTest {
 
 	private static final Expenses EXPENSE = new Expenses(1, BigDecimal.valueOf(10), "expense 1",
-		LocalDateTime.of(2025, 1, 1, 0, 0));
+		LocalDateTime.of(2025, 1, 1, 0, 0, 0));
 
 	private static final String JSON_EXPENSE = """
 		  {
@@ -50,13 +50,13 @@ public class ExpenseJsonTest {
 	}
 
 	@Test
-	void deserializationExperensesTest() throws IOException {
+	void deserializationExpensesTest() throws IOException {
 		ObjectContent<Expenses> objectMyExpense = jsonTester.parse(JSON_EXPENSE);
 		assertThat(objectMyExpense).isEqualTo(EXPENSE);
 		Expenses expense = jsonTester.parseObject(JSON_EXPENSE);
 		assertThat(expense.getId()).isEqualTo(1);
-		assertThat(expense.getAmount()).isEqualTo(10L);
-		assertThat(expense.getExpenseName()).isEqualTo("income 1");
-		assertThat(expense.getExpenseDate()).isEqualTo("2025-01-01T00:00:00");
+		assertThat(expense.getAmount()).isEqualTo(BigDecimal.valueOf(10));
+		assertThat(expense.getExpenseName()).isEqualTo("expense 1");
+		assertThat(expense.getExpenseDate()).isEqualTo(LocalDateTime.of(2025, 1, 1, 0, 0, 0));
 	}
 }

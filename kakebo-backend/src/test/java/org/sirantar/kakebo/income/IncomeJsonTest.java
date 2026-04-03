@@ -55,8 +55,8 @@ public class IncomeJsonTest {
 		assertThat(objectMyIncome).isEqualTo(INCOME);
 		Incomes income = jsonTester.parseObject(JSON_INCOME);
 		assertThat(income.getId()).isEqualTo(1);
-		assertThat(income.getAmount()).isEqualTo(10L);
+		assertThat(income.getAmount()).isEqualTo(BigDecimal.valueOf(10));
 		assertThat(income.getIncomeName()).isEqualTo("income 1");
-		assertThat(income.getIncomeDate()).isEqualTo("2025-01-01T00:00:00");
+		assertThat(income.getIncomeDate()).isEqualTo(LocalDateTime.of(2025, 1, 1, 0, 0, 0));
 	}
 }

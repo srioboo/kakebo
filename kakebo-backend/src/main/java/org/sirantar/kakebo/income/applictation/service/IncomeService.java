@@ -24,4 +24,30 @@ public class IncomeService {
 		return result.orElse(new Incomes());
 	}
 
+	public Incomes createIncome(Incomes incomes) {
+		return incomeRepository.save(incomes);
+	}
+
+	public Incomes updateIncome(Long id, Incomes incomes) {
+		Optional<Incomes> existingIncome = incomeRepository.findById(id);
+		if (existingIncome.isPresent()) {
+			Incomes income = existingIncome.get();
+			if (incomes.getAmount() != null) {
+				income.setAmount(incomes.getAmount());
+			}
+			if (incomes.getIncomeName() != null) {
+				income.setIncomeName(incomes.getIncomeName());
+			}
+			if (incomes.getIncomeDate() != null) {
+				income.setIncomeDate(incomes.getIncomeDate());
+			}
+			return incomeRepository.save(income);
+		}
+		return null;
+	}
+
+	public void deleteIncome(Long id) {
+		incomeRepository.deleteById(id);
+	}
+
 }

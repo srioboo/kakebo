@@ -58,4 +58,27 @@ public class Incomes {
 	public void setIncomeDate(LocalDateTime incomeDate) {
 		this.incomeDate = incomeDate;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Incomes incomes = (Incomes) o;
+
+		if (id != null ? !id.equals(incomes.id) : incomes.id != null) return false;
+		if (amount != null ? !amount.equals(incomes.amount) : incomes.amount != null) return false;
+		if (incomeName != null ? !incomeName.equals(incomes.incomeName) : incomes.incomeName != null)
+			return false;
+		return incomeDate != null ? incomeDate.equals(incomes.incomeDate) : incomes.incomeDate == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (amount != null ? amount.hashCode() : 0);
+		result = 31 * result + (incomeName != null ? incomeName.hashCode() : 0);
+		result = 31 * result + (incomeDate != null ? incomeDate.hashCode() : 0);
+		return result;
+	}
 }
