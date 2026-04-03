@@ -1,4 +1,4 @@
-package org.sirantar.kakebo.income.applictation.dto;
+package org.sirantar.kakebo.income.application.dto;
 
 import java.math.BigDecimal;
 

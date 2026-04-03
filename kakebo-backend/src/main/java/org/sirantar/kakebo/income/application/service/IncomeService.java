@@ -1,4 +1,4 @@
-package org.sirantar.kakebo.income.applictation.service;
+package org.sirantar.kakebo.income.application.service;
 
 import org.sirantar.kakebo.income.domain.model.Incomes;
 import org.sirantar.kakebo.income.domain.repository.IncomeRepository;
