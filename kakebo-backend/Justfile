@@ -1,0 +1,18 @@
+# Justfile
+# This file defines common tasks for the Kakebo backend project.
+
+# Start the Spring Boot application
+start:
+    bash scripts/manage.sh start
+
+# Stop the Spring Boot application
+stop:
+    bash scripts/manage.sh stop
+
+# Run tests for the project
+test:
+    bash scripts/manage.sh test
+
+# Build the project
+build:
+    bash scripts/manage.sh build
