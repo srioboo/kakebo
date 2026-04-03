@@ -28,6 +28,16 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+		<sonar.projectKey>kakebo-backend</sonar.projectKey>
+		<sonar.projectName>Kakebo Backend</sonar.projectName>
+		<sonar.projectVersion>0.0.1-SNAPSHOT</sonar.projectVersion>
+		<sonar.language>java</sonar.language>
+		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+		<sonar.sources>src/main</sonar.sources>
+		<sonar.tests>src/test</sonar.tests>
+		<sonar.exclusions>**/generated-sources/**</sonar.exclusions>
+		<sonar.java.binaries>target/classes</sonar.java.binaries>
+		<sonar.java.libraries>target/classes</sonar.java.libraries>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -132,6 +142,32 @@
 				<configuration>
 					<argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
 				</configuration>
+			</plugin>
+			<!-- SonarQube Maven Plugin for comprehensive code quality analysis -->
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>4.0.0.4121</version>
+			</plugin>
+			<!-- Jacoco for code coverage reports -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
