@@ -16,3 +16,23 @@ test:
 # Build the project
 build:
     bash scripts/manage.sh build
+
+# Run all quality checks (SonarQube local + coverage)
+lint:
+    bash scripts/manage.sh lint
+
+# Run SonarQube analysis (requires SonarQube server)
+sonar:
+    bash scripts/manage.sh sonar
+
+# Run local SonarQube analysis (no server needed)
+sonar-local:
+    bash scripts/manage.sh sonar-local
+
+# Generate code coverage reports
+coverage:
+    bash scripts/manage.sh coverage
+
+# Display help
+help:
+    bash scripts/manage.sh help
