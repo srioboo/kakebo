@@ -1,3 +1,3 @@
 package org.sirantar.kakebo.expenses.infrastructure;
 
-public class EntityManager {}
+public class ExpensesController {}

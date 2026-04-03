@@ -59,4 +59,26 @@ public class Expenses {
 		this.expenseDate = expenseDate;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Expenses expenses = (Expenses) o;
+
+		if (id != null ? !id.equals(expenses.id) : expenses.id != null) return false;
+		if (amount != null ? !amount.equals(expenses.amount) : expenses.amount != null) return false;
+		if (expenseName != null ? !expenseName.equals(expenses.expenseName) : expenses.expenseName != null)
+			return false;
+		return expenseDate != null ? expenseDate.equals(expenses.expenseDate) : expenses.expenseDate == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (amount != null ? amount.hashCode() : 0);
+		result = 31 * result + (expenseName != null ? expenseName.hashCode() : 0);
+		result = 31 * result + (expenseDate != null ? expenseDate.hashCode() : 0);
+		return result;
+	}
 }
