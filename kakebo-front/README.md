@@ -35,7 +35,7 @@ bun run test:e2e
 
 ## Variable de entorno
 
-Para consumir datos reales, define `VITE_API_BASE_URL` (usada por `src/lib/api.js` para `/incomes` y `/expenses`).
+Para consumir datos reales, define `VITE_API_BASE_URL` (usada por `src/lib/api.ts` para `/incomes` y `/expenses`).
 
 ## Alternativa con npm
 
@@ -47,4 +47,3 @@ npm run dev
 npm run build
 npm run preview
 ```
-
