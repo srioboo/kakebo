@@ -8,15 +8,15 @@
 ## Mapa de arquitectura (leer primero)
 - Shell global y navegacion: `src/routes/+layout.svelte`.
 - Punto de entrada HTML con placeholders i18n: `src/app.html` (`%paraglide.lang%`, `%paraglide.textDirection%`).
-- Home SSR + carga de datos: `src/routes/+page.server.js` -> `src/lib/api.js` -> render en `src/routes/+page.svelte`.
+- Home SSR + carga de datos: `src/routes/+page.server.ts` -> `src/lib/api.ts` -> render en `src/routes/+page.svelte`.
 - Rutas secundarias simples: `src/routes/diario/+page.svelte`, `src/routes/resumen/+page.svelte`, `src/routes/ayuda/+page.svelte`.
 - Demo de cambio de idioma en cliente: `src/routes/demo/paraglide/+page.svelte`.
 
 ## Flujo de datos y limites
-- Limite Frontend/API: `src/lib/api.js` usa `import.meta.env.VITE_API_BASE_URL` y llama `/incomes` y `/expenses`.
-- El `load()` server-side de `src/routes/+page.server.js` devuelve `{ expenses, incomes }` o `{ error }`.
+- Limite Frontend/API: `src/lib/api.ts` usa `import.meta.env.VITE_API_BASE_URL` y llama `/incomes` y `/expenses`.
+- El `load()` server-side de `src/routes/+page.server.ts` devuelve `{ expenses, incomes }` o `{ error }`.
 - `src/routes/+page.svelte` consume `incomes?.data` y `expenses?.data`; mantén esta forma al tocar fetch/load/UI.
-- Si agregas nuevos endpoints, extiende `src/lib/api.js` y luego conecta en `+page.server.js` (no fetch directo desde la vista principal).
+- Si agregas nuevos endpoints, extiende `src/lib/api.ts` y luego conecta en `+page.server.ts` (no fetch directo desde la vista principal).
 
 ## i18n y rutas localizadas (Paraglide)
 - Config i18n: `project.inlang/settings.json` con `sourceLanguageTag: "es"` y `languageTags: ["es", "en"]`.
@@ -45,4 +45,3 @@
 - API backend via `VITE_API_BASE_URL` (variable requerida para datos reales de ingresos/gastos).
 - Paraglide se integra como plugin Vite (`vite.config.ts`, `paraglide({ project, outdir })`).
 - TailwindCSS v4 via plugin de Vite (`@tailwindcss/vite`) y `@import 'tailwindcss';` en `src/app.css`.
-

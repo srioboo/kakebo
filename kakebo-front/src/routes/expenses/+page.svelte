@@ -132,7 +132,7 @@
 		</div>
 	{/if}
 
-	<div class="bg-white rounded-lg shadow-md p-6">
+	<div class="rounded-lg shadow-md p-6">
 		{#if isLoading}
 			<LoadingSpinner size="md" />
 		{:else}
