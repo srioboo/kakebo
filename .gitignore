@@ -134,3 +134,10 @@ dist
 *.iws
 *.iml
 *.ipr
+
+# Dev script logs
+/tmp/kakebo-*.log
+*.log
+
+# Dev script pid files
+*.pid
