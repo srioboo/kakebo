@@ -221,34 +221,32 @@ logs() {
 
 # Mostrar ayuda
 show_help() {
-    cat << EOF
-${BLUE}Kakebo Development Helper${NC}
-
-Uso: ./dev.sh [comando]
-
-Comandos:
-    ${GREEN}start-backend${NC}     Inicia solo el backend (Spring Boot)
-    ${GREEN}start-frontend${NC}    Inicia solo el frontend (SvelteKit)
-    ${GREEN}start${NC}             Inicia backend y frontend (recomendado)
-    ${GREEN}stop${NC}              Detiene todos los servicios
-    ${GREEN}restart${NC}           Reinicia todos los servicios
-    ${GREEN}status${NC}            Muestra el estado de los servicios
-    ${GREEN}logs${NC}              Muestra los logs del backend
-    ${GREEN}help${NC}              Muestra esta ayuda
-
-Ejemplos:
-    ./dev.sh start              # Inicia todo
-    ./dev.sh start-backend      # Solo backend
-    ./dev.sh status             # Ver qué está corriendo
-    ./dev.sh logs               # Ver logs del backend
-
-${YELLOW}Notas:${NC}
-    - El primer inicio puede tardar más (descarga dependencias)
-    - Frontend está en http://localhost:5173
-    - Backend está en http://localhost:9090
-    - Swagger en http://localhost:9090/swagger-ui.html
-
-EOF
+    echo -e "${BLUE}Kakebo Development Helper${NC}"
+    echo ""
+    echo -e "Uso: ./dev.sh [comando]"
+    echo ""
+    echo -e "${YELLOW}Comandos:${NC}"
+    echo -e "    ${GREEN}start-backend${NC}     Inicia solo el backend (Spring Boot)"
+    echo -e "    ${GREEN}start-frontend${NC}    Inicia solo el frontend (SvelteKit)"
+    echo -e "    ${GREEN}start${NC}             Inicia backend y frontend (recomendado)"
+    echo -e "    ${GREEN}stop${NC}              Detiene todos los servicios"
+    echo -e "    ${GREEN}restart${NC}           Reinicia todos los servicios"
+    echo -e "    ${GREEN}status${NC}            Muestra el estado de los servicios"
+    echo -e "    ${GREEN}logs${NC}              Muestra los logs del backend"
+    echo -e "    ${GREEN}help${NC}              Muestra esta ayuda"
+    echo ""
+    echo -e "${YELLOW}Ejemplos:${NC}"
+    echo -e "    ./dev.sh start              # Inicia todo"
+    echo -e "    ./dev.sh start-backend      # Solo backend"
+    echo -e "    ./dev.sh status             # Ver qué está corriendo"
+    echo -e "    ./dev.sh logs               # Ver logs del backend"
+    echo ""
+    echo -e "${YELLOW}Notas:${NC}"
+    echo -e "    - El primer inicio puede tardar más (descarga dependencias)"
+    echo -e "    - Frontend está en http://localhost:5173"
+    echo -e "    - Backend está en http://localhost:9090"
+    echo -e "    - Swagger en http://localhost:9090/swagger-ui.html"
+    echo ""
 }
 
 # Main
