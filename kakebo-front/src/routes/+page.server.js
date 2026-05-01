@@ -1,13 +1,12 @@
-import { fetchPosts, fetchExpenses, fetchIncomes } from '$lib/api';
+import { getExpenses, getIncomes } from '$lib/api';
 
 export async function load() {
 	try {
-		// const posts = await fetchPosts();
-		const expenses = await fetchExpenses();
-		const incomes = await fetchIncomes();
-		// return { posts, expenses };
+		const expenses = await getExpenses();
+		const incomes = await getIncomes();
 		return { expenses, incomes };
 	} catch (error) {
-		return { error: error.message };
+		const errorMessage = error instanceof Error ? error.message : 'Error loading data';
+		return { error: errorMessage, expenses: [], incomes: [] };
 	}
 }
