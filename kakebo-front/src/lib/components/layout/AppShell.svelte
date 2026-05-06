@@ -1,5 +1,9 @@
-<div class="min-h-screen bg-slate-950 text-slate-100">
-	<header class="border-b border-slate-800 px-4 py-3">
+<script lang="ts">
+	let { mainId = 'main-content' } = $props();
+</script>
+
+<div class="min-h-screen bg-[var(--kb-bg)] text-[var(--kb-text)]">
+	<header class="border-b border-[var(--kb-border)] bg-[var(--kb-surface)] px-4 py-3">
 		<slot name="header" />
 	</header>
 
@@ -7,9 +11,8 @@
 		<aside class="hidden w-56 shrink-0 md:block">
 			<slot name="sidebarLeft" />
 		</aside>
-		<main class="min-w-0 flex-1">
+		<main id={mainId} class="min-w-0 flex-1 rounded-xl focus:outline-none">
 			<slot />
 		</main>
 	</div>
 </div>
-
