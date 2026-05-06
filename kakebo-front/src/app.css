@@ -1,1 +1,103 @@
 @import 'tailwindcss';
+
+:root {
+	--kb-bg: #f5f1e7;
+	--kb-surface: #fcfaf6;
+	--kb-surface-soft: #f3ecdf;
+	--kb-border: #d7ccba;
+	--kb-text: #2f2a22;
+	--kb-text-muted: #5d554b;
+	--kb-accent: #607d62;
+	--kb-accent-strong: #49614b;
+	--kb-focus: #8f6a4d;
+	--kb-shadow: 0 8px 24px rgb(56 44 28 / 8%);
+}
+
+@layer base {
+	html,
+	body {
+		background: var(--kb-bg);
+		color: var(--kb-text);
+	}
+
+	html {
+		color-scheme: light;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		min-height: 100vh;
+		font-family:
+			'Inter',
+			'Nunito Sans',
+			'Segoe UI',
+			system-ui,
+			-apple-system,
+			sans-serif;
+		line-height: 1.45;
+	}
+
+	h1,
+	h2,
+	h3 {
+		letter-spacing: -0.01em;
+	}
+
+	::selection {
+		background: color-mix(in srgb, var(--kb-accent) 24%, white);
+		color: var(--kb-text);
+	}
+
+	a,
+	button,
+	input,
+	select,
+	textarea {
+		font: inherit;
+	}
+}
+
+@layer components {
+	.kakebo-surface {
+		border: 1px solid var(--kb-border);
+		background: var(--kb-surface);
+		box-shadow: var(--kb-shadow);
+	}
+
+	.kakebo-panel {
+		border: 1px solid var(--kb-border);
+		background: var(--kb-surface-soft);
+	}
+
+	.kakebo-muted {
+		color: var(--kb-text-muted);
+	}
+
+	.kakebo-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.75rem;
+		border-radius: 0.65rem;
+		border: 1px solid var(--kb-border);
+		background: var(--kb-surface);
+		color: var(--kb-text);
+		padding: 0.4rem 0.85rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		transition:
+			background-color 180ms ease,
+			border-color 180ms ease,
+			color 180ms ease;
+	}
+
+	.kakebo-button:hover {
+		border-color: var(--kb-accent);
+		background: color-mix(in srgb, var(--kb-accent) 9%, white);
+	}
+
+	.kakebo-button:focus-visible {
+		outline: 2px solid var(--kb-focus);
+		outline-offset: 2px;
+	}
+}

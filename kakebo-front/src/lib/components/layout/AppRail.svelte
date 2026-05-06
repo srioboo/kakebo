@@ -1,4 +1,4 @@
-<nav class="flex h-full min-h-96 flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-2">
+<nav aria-label="Navegacion principal" class="kakebo-surface flex h-full min-h-96 flex-col rounded-xl p-2">
 	<div class="mb-2">
 		<slot name="lead" />
 	</div>
@@ -11,4 +11,3 @@
 		<slot name="trail" />
 	</div>
 </nav>
-
