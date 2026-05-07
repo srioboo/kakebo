@@ -23,10 +23,18 @@ export const actions = {
 		}
 
 		try {
+			const incomes = await getIncomes();
+			const nextId =
+				incomes.reduce((maxId, current) => {
+					const currentId = current.id ?? 0;
+					return currentId > maxId ? currentId : maxId;
+				}, 0) + 1;
+
 			const income = await createIncome({
+				id: nextId,
 				incomeName,
 				amount,
-				incomeDate: new Date(incomeDate).toISOString(),
+				incomeDate,
 			});
 			return { success: true, message: 'Ingreso creado correctamente', income };
 		} catch (error) {
@@ -49,7 +57,7 @@ export const actions = {
 		const updates: Partial<Income> = {};
 		if (incomeName) updates.incomeName = incomeName;
 		if (amount) updates.amount = parseFloat(amount);
-		if (incomeDate) updates.incomeDate = new Date(incomeDate).toISOString();
+		if (incomeDate) updates.incomeDate = incomeDate;
 
 		try {
 			const income = await updateIncome(id, updates);

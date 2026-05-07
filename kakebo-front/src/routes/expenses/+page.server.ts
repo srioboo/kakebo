@@ -23,10 +23,18 @@ export const actions = {
 		}
 
 		try {
+			const expenses = await getExpenses();
+			const nextId =
+				expenses.reduce((maxId, current) => {
+					const currentId = current.id ?? 0;
+					return currentId > maxId ? currentId : maxId;
+				}, 0) + 1;
+
 			const expense = await createExpense({
+				id: nextId,
 				expenseName,
 				amount,
-				expenseDate: new Date(expenseDate).toISOString(),
+				expenseDate,
 			});
 			return { success: true, message: 'Gasto creado correctamente', expense };
 		} catch (error) {
@@ -49,7 +57,7 @@ export const actions = {
 		const updates: Partial<Expense> = {};
 		if (expenseName) updates.expenseName = expenseName;
 		if (amount) updates.amount = parseFloat(amount);
-		if (expenseDate) updates.expenseDate = new Date(expenseDate).toISOString();
+		if (expenseDate) updates.expenseDate = expenseDate;
 
 		try {
 			const expense = await updateExpense(id, updates);

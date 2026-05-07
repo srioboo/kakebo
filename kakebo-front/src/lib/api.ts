@@ -68,9 +68,10 @@ function validateExpense(expense: Partial<Expense>): Expense {
 		throw new Error('expenseDate is required');
 	}
 	return {
+		id: expense.id ?? null,
 		expenseName: expense.expenseName.trim(),
 		amount: expense.amount,
-		expenseDate: expense.expenseDate,
+		expenseDate: toBackendLocalDateTime(expense.expenseDate),
 	};
 }
 
@@ -88,10 +89,30 @@ function validateIncome(income: Partial<Income>): Income {
 		throw new Error('incomeDate is required');
 	}
 	return {
+		id: income.id ?? null,
 		incomeName: income.incomeName.trim(),
 		amount: income.amount,
-		incomeDate: income.incomeDate,
+		incomeDate: toBackendLocalDateTime(income.incomeDate),
 	};
+}
+
+function toBackendLocalDateTime(value: string): string {
+	const normalizedInput = value.trim();
+	const parsedDate = new Date(normalizedInput);
+
+	if (!Number.isNaN(parsedDate.getTime())) {
+		return parsedDate.toISOString().replace(/\.\d{3}Z$/, '');
+	}
+
+	const fallback = normalizedInput.replace(' ', 'T').replace(/Z$/, '');
+	if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(fallback)) {
+		return `${fallback}:00`;
+	}
+	if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(fallback)) {
+		return fallback;
+	}
+
+	throw new Error('Invalid date format');
 }
 
 // ============================================================================
@@ -173,6 +194,10 @@ export async function getExpense(id: number): Promise<Expense> {
 }
 
 export async function createExpense(expense: Partial<Expense>): Promise<Expense> {
+	if (expense.id === undefined || expense.id === null) {
+		throw new Error('id is required');
+	}
+
 	const validated = validateExpense(expense);
 	try {
 		return await fetchApi<Expense>('/expenses', {
@@ -193,6 +218,9 @@ export async function updateExpense(
 	const payload = Object.fromEntries(
 		Object.entries(expense).filter(([, v]) => v !== null && v !== undefined),
 	);
+	if (typeof payload.expenseDate === 'string') {
+		payload.expenseDate = toBackendLocalDateTime(payload.expenseDate);
+	}
 
 	try {
 		return await fetchApi<Expense>(`/expenses/${id}`, {
@@ -240,6 +268,10 @@ export async function getIncome(id: number): Promise<Income> {
 }
 
 export async function createIncome(income: Partial<Income>): Promise<Income> {
+	if (income.id === undefined || income.id === null) {
+		throw new Error('id is required');
+	}
+
 	const validated = validateIncome(income);
 	try {
 		return await fetchApi<Income>('/incomes', {
@@ -260,6 +292,9 @@ export async function updateIncome(
 	const payload = Object.fromEntries(
 		Object.entries(income).filter(([, v]) => v !== null && v !== undefined),
 	);
+	if (typeof payload.incomeDate === 'string') {
+		payload.incomeDate = toBackendLocalDateTime(payload.incomeDate);
+	}
 
 	try {
 		return await fetchApi<Income>(`/incomes/${id}`, {
