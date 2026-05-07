@@ -67,34 +67,63 @@
 				<h2 class="text-lg font-semibold">Ingresos del mes</h2>
 			</header>
 			<div class="overflow-auto">
-				<table class="w-full min-w-[520px] text-sm">
+				<table class="w-full min-w-[560px] border-separate border-spacing-0 text-sm">
 					<caption class="sr-only">Listado de ingresos del mes</caption>
 					<thead class="bg-[var(--kb-surface-soft)] text-left">
 						<tr>
-							<th scope="col" class="px-4 py-3 font-medium">Concepto</th>
-							<th scope="col" class="px-4 py-3 font-medium">Fecha</th>
-							<th scope="col" class="px-4 py-3 text-right font-medium">Importe</th>
+							<th
+								scope="col"
+								class="sticky top-0 z-10 border-b border-[var(--kb-border)] px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)]"
+							>
+								Concepto
+							</th>
+							<th
+								scope="col"
+								class="sticky top-0 z-10 border-b border-[var(--kb-border)] px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)]"
+							>
+								Fecha
+							</th>
+							<th
+								scope="col"
+								class="sticky top-0 z-10 border-b border-[var(--kb-border)] px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)]"
+							>
+								Importe
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#if incomes.length > 0}
 							{#each incomes as income}
-								<tr class="border-t border-[var(--kb-border)]">
-									<td class="px-4 py-3">{income.incomeName}</td>
-									<td class="px-4 py-3 kakebo-muted">{formatDate(income.incomeDate)}</td>
-									<td class="px-4 py-3 text-right font-medium">{formatCurrency(income.amount)}</td>
+								<tr
+									class="odd:bg-[var(--kb-surface)] even:bg-[var(--kb-row-alt)] hover:bg-[var(--kb-surface-soft)]"
+								>
+									<td class="border-b border-[var(--kb-border)] px-4 py-3 font-medium">{income.incomeName}</td>
+									<td class="kakebo-muted whitespace-nowrap border-b border-[var(--kb-border)] px-4 py-3">
+										{formatDate(income.incomeDate)}
+									</td>
+									<td
+										class="whitespace-nowrap border-b border-[var(--kb-border)] px-4 py-3 text-right font-semibold tabular-nums text-[var(--kb-accent-strong)]"
+									>
+										{formatCurrency(income.amount)}
+									</td>
 								</tr>
 							{/each}
 						{:else}
-							<tr class="border-t border-[var(--kb-border)]">
-								<td colspan="3" class="kakebo-muted px-4 py-4">Sin ingresos registrados por ahora.</td>
+							<tr>
+								<td colspan="3" class="kakebo-muted border-b border-[var(--kb-border)] px-4 py-4">
+									Sin ingresos registrados por ahora.
+								</td>
 							</tr>
 						{/if}
 					</tbody>
 					<tfoot>
-						<tr class="border-t border-[var(--kb-border)] bg-[var(--kb-surface-soft)]">
-							<td colspan="2" class="px-4 py-3 font-medium">Total ingresos</td>
-							<td class="px-4 py-3 text-right font-semibold">{formatCurrency(monthlyIncome)}</td>
+						<tr class="bg-[var(--kb-surface-soft)]">
+							<td colspan="2" class="px-4 py-3 text-sm font-semibold text-[var(--kb-accent-strong)]">
+								Total ingresos
+							</td>
+							<td class="px-4 py-3 text-right text-base font-bold tabular-nums text-[var(--kb-accent-strong)]">
+								{formatCurrency(monthlyIncome)}
+							</td>
 						</tr>
 					</tfoot>
 				</table>
