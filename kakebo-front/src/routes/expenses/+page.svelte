@@ -112,19 +112,19 @@
 	}
 </script>
 
-<div class="container mx-auto px-4 py-8">
-	<div class="flex flex-row justify-between items-center mb-6">
+<div class="mx-auto flex w-full max-w-7xl flex-col gap-6">
+	<div class="kakebo-surface flex flex-col items-start justify-between gap-4 rounded-2xl p-6 md:flex-row md:items-center">
 		<div>
-			<h1 class="text-3xl font-bold">Gestión de Gastos</h1>
-			<p class="text-gray-600">Administra todos tus gastos en un solo lugar</p>
+			<h1 class="text-2xl font-semibold text-[var(--kb-accent-strong)]">Gestion de gastos</h1>
+			<p class="kakebo-muted mt-1 text-sm">Administra tus gastos con una lectura clara y ordenada.</p>
 		</div>
-		<button class="btn btn-primary" on:click={openCreateModal}>
+		<button class="kakebo-button" on:click={openCreateModal}>
 			+ Crear Gasto
 		</button>
 	</div>
 
 	{#if error}
-		<div class="alert alert-error mb-4">
+		<div class="flex items-center gap-2 rounded-xl border border-[#d08d6d] bg-[#f8e8df] px-4 py-3 text-sm text-[#73422b]">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 0v2m0-6V9m0 0V7m0 12v-2m6-2v2m0 0v2m0-6v-2m0 0v-2m-6-2v-2m0 0V7M9 7v2m2-2V7m2 0v2" />
 			</svg>
@@ -132,7 +132,7 @@
 		</div>
 	{/if}
 
-	<div class="rounded-lg shadow-md p-6">
+	<div class="kakebo-surface rounded-xl p-6">
 		{#if isLoading}
 			<LoadingSpinner size="md" />
 		{:else}

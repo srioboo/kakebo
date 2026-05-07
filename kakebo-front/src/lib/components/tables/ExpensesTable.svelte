@@ -37,7 +37,7 @@
 		return expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
 	}
 
-	const sortedExpenses = getSortedExpenses();
+	$: sortedExpenses = getSortedExpenses();
 </script>
 
 <div class="overflow-x-auto">
@@ -50,12 +50,14 @@
 			onAction={() => {}}
 		/>
 	{:else}
-		<table class="table w-full">
-			<thead>
+		<table class="w-full min-w-[760px] border-separate border-spacing-0 text-sm">
+			<caption class="sr-only">Listado de gastos con ordenacion y acciones</caption>
+			<thead class="bg-[var(--kb-surface-soft)]">
 				<tr>
 					<th
 						on:click={() => toggleSort('id')}
-						class="cursor-pointer hover:bg-base-200"
+						scope="col"
+						class="sticky top-0 z-10 cursor-pointer border-b border-[var(--kb-border)] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)] hover:bg-[var(--kb-row-alt)]"
 					>
 						ID
 						{#if sortBy === 'id'}
@@ -64,7 +66,8 @@
 					</th>
 					<th
 						on:click={() => toggleSort('expenseName')}
-						class="cursor-pointer hover:bg-base-200"
+						scope="col"
+						class="sticky top-0 z-10 cursor-pointer border-b border-[var(--kb-border)] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)] hover:bg-[var(--kb-row-alt)]"
 					>
 						Concepto
 						{#if sortBy === 'expenseName'}
@@ -73,7 +76,8 @@
 					</th>
 					<th
 						on:click={() => toggleSort('amount')}
-						class="cursor-pointer hover:bg-base-200"
+						scope="col"
+						class="sticky top-0 z-10 cursor-pointer border-b border-[var(--kb-border)] px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)] hover:bg-[var(--kb-row-alt)]"
 					>
 						Importe
 						{#if sortBy === 'amount'}
@@ -82,25 +86,35 @@
 					</th>
 					<th
 						on:click={() => toggleSort('expenseDate')}
-						class="cursor-pointer hover:bg-base-200"
+						scope="col"
+						class="sticky top-0 z-10 cursor-pointer border-b border-[var(--kb-border)] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)] hover:bg-[var(--kb-row-alt)]"
 					>
 						Fecha
 						{#if sortBy === 'expenseDate'}
 							<span class="text-xs">{sortOrder === 'asc' ? '▲' : '▼'}</span>
 						{/if}
 					</th>
-					<th>Acciones</th>
+					<th
+						scope="col"
+						class="sticky top-0 z-10 border-b border-[var(--kb-border)] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--kb-text-muted)]"
+					>
+						Acciones
+					</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each sortedExpenses as expense (expense.id)}
-					<tr class="hover:bg-base-100">
-						<td>{expense.id}</td>
-						<td class="font-medium">{expense.expenseName}</td>
-						<td class="text-right font-semibold">
+					<tr
+						class="odd:bg-[var(--kb-surface)] even:bg-[var(--kb-row-alt)] hover:bg-[var(--kb-surface-soft)]"
+					>
+						<td class="border-b border-[var(--kb-border)] px-4 py-3 text-[var(--kb-text-muted)]">{expense.id}</td>
+						<td class="border-b border-[var(--kb-border)] px-4 py-3 font-medium">{expense.expenseName}</td>
+						<td
+							class="border-b border-[var(--kb-border)] px-4 py-3 text-right font-semibold tabular-nums text-[var(--kb-accent-strong)]"
+						>
 							{formatCurrency(expense.amount || 0)}
 						</td>
-						<td>
+						<td class="kakebo-muted whitespace-nowrap border-b border-[var(--kb-border)] px-4 py-3">
 							{formatDate(expense.expenseDate || '', 'es-ES', {
 								year: 'numeric',
 								month: 'short',
@@ -109,29 +123,35 @@
 								minute: '2-digit',
 							})}
 						</td>
-						<td class="flex gap-2">
+						<td class="border-b border-[var(--kb-border)] px-4 py-3">
+							<div class="flex gap-2">
 							<button
-								class="btn btn-xs btn-outline"
+								class="inline-flex min-h-8 items-center justify-center rounded-md border border-[var(--kb-border)] bg-[var(--kb-surface)] px-2.5 text-xs font-medium hover:bg-[var(--kb-surface-soft)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)]"
 								on:click={() => onEdit(expense)}
 								title="Editar"
+								aria-label={`Editar gasto ${expense.expenseName}`}
 							>
 								✎
 							</button>
 							<button
-								class="btn btn-xs btn-outline btn-error"
+								class="inline-flex min-h-8 items-center justify-center rounded-md border border-[#d08d6d] bg-[#fbf0ea] px-2.5 text-xs font-medium text-[#8a4a2c] hover:bg-[#f7e2d7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a15d3e]"
 								on:click={() => onDelete(expense.id || 0)}
 								title="Eliminar"
+								aria-label={`Eliminar gasto ${expense.expenseName}`}
 							>
 								🗑
 							</button>
+							</div>
 						</td>
 					</tr>
 				{/each}
 			</tbody>
 			<tfoot>
-				<tr class="font-bold">
-					<td colspan="2">Total</td>
-					<td class="text-right">{formatCurrency(getTotalAmount())}</td>
+				<tr class="bg-[var(--kb-surface-soft)]">
+					<td colspan="2" class="px-4 py-3 text-sm font-semibold text-[var(--kb-accent-strong)]">Total</td>
+					<td class="px-4 py-3 text-right text-base font-bold tabular-nums text-[var(--kb-accent-strong)]">
+						{formatCurrency(getTotalAmount())}
+					</td>
 					<td colspan="2"></td>
 				</tr>
 			</tfoot>
