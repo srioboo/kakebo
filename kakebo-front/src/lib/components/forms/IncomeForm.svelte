@@ -56,88 +56,77 @@
 	}
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="space-y-4">
-	<!-- Concepto/Descripción -->
-	<div class="form-control w-full">
-		<label class="label" for="incomeName">
-			<span class="label-text">Concepto</span>
-		</label>
+<form on:submit|preventDefault={handleSubmit} class="space-y-4" aria-live="polite">
+	<div class="space-y-1">
+		<label class="text-sm font-semibold text-[var(--kb-text)]" for="incomeName">Concepto</label>
 		<input
 			id="incomeName"
 			type="text"
 			placeholder="Ej: Salario, Freelance..."
-			class="input input-bordered w-full"
-			class:input-error={errors.incomeName}
+			class="w-full rounded-lg border bg-[var(--kb-surface)] px-3 py-2.5 text-sm text-[var(--kb-text)] placeholder:text-[var(--kb-text-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)]"
+			class:border-[#cf7e5c]={errors.incomeName}
+			class:border-[var(--kb-border)]={!errors.incomeName}
 			bind:value={formData.incomeName}
 			disabled={isLoading}
 		/>
 		{#if errors.incomeName}
-			<label class="label" for="incomeName">
-				<span class="label-text-alt text-error">{errors.incomeName}</span>
-			</label>
+			<p class="text-xs font-medium text-[#a34f2f]">{errors.incomeName}</p>
 		{/if}
 	</div>
 
-	<!-- Importe -->
-	<div class="form-control w-full">
-		<label class="label" for="amount">
-			<span class="label-text">Importe (€)</span>
-		</label>
+	<div class="space-y-1">
+		<label class="text-sm font-semibold text-[var(--kb-text)]" for="amount">Importe (EUR)</label>
 		<input
 			id="amount"
 			type="number"
 			placeholder="0.00"
 			step="0.01"
 			min="0"
-			class="input input-bordered w-full"
-			class:input-error={errors.amount}
+			class="w-full rounded-lg border bg-[var(--kb-surface)] px-3 py-2.5 text-sm text-[var(--kb-text)] placeholder:text-[var(--kb-text-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)]"
+			class:border-[#cf7e5c]={errors.amount}
+			class:border-[var(--kb-border)]={!errors.amount}
 			bind:value={formData.amount}
 			disabled={isLoading}
 		/>
 		{#if errors.amount}
-			<label class="label" for="amount">
-				<span class="label-text-alt text-error">{errors.amount}</span>
-			</label>
+			<p class="text-xs font-medium text-[#a34f2f]">{errors.amount}</p>
 		{/if}
 	</div>
 
-	<!-- Fecha -->
-	<div class="form-control w-full">
-		<label class="label" for="incomeDate">
-			<span class="label-text">Fecha</span>
-		</label>
+	<div class="space-y-1">
+		<label class="text-sm font-semibold text-[var(--kb-text)]" for="incomeDate">Fecha</label>
 		<input
 			id="incomeDate"
 			type="datetime-local"
-			class="input input-bordered w-full"
-			class:input-error={errors.incomeDate}
+			class="w-full rounded-lg border bg-[var(--kb-surface)] px-3 py-2.5 text-sm text-[var(--kb-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)]"
+			class:border-[#cf7e5c]={errors.incomeDate}
+			class:border-[var(--kb-border)]={!errors.incomeDate}
 			bind:value={formData.incomeDate}
 			disabled={isLoading}
 		/>
 		{#if errors.incomeDate}
-			<label class="label" for="incomeDate">
-				<span class="label-text-alt text-error">{errors.incomeDate}</span>
-			</label>
+			<p class="text-xs font-medium text-[#a34f2f]">{errors.incomeDate}</p>
 		{/if}
 	</div>
 
-	<!-- Acciones -->
-	<div class="form-control mt-6 flex flex-row gap-2">
+	<div class="mt-6 flex flex-row gap-2">
 		<button
 			type="submit"
-			class="btn btn-primary flex-1"
+			class="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[var(--kb-accent)] bg-[var(--kb-accent)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--kb-accent-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)] disabled:cursor-not-allowed disabled:opacity-60"
 			disabled={isLoading}
 		>
 			{#if isLoading}
-				<LoadingSpinner size="sm" />
-				Guardando...
+				<span class="flex items-center gap-2">
+					<LoadingSpinner size="sm" />
+					Guardando...
+				</span>
 			{:else}
 				{isEditing ? 'Actualizar' : 'Crear'} Ingreso
 			{/if}
 		</button>
 		<button
 			type="button"
-			class="btn btn-ghost flex-1"
+			class="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-[var(--kb-border)] bg-[var(--kb-surface)] px-4 text-sm font-semibold text-[var(--kb-text)] transition hover:bg-[var(--kb-surface-soft)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--kb-focus)] disabled:cursor-not-allowed disabled:opacity-60"
 			on:click={handleCancel}
 			disabled={isLoading}
 		>
