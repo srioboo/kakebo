@@ -1,5 +1,7 @@
 # Kakebo Front
 
+> Repository docs: `../docs/README.md` — primary project documentation and API contract (`../docs/api-contract.md`).
+
 Frontend de Kakebo construido con SvelteKit 2, Svelte 5, TailwindCSS 4 y Paraglide (i18n).
 
 ## Flujo principal (Bun)

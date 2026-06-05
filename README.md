@@ -1,5 +1,7 @@
 # Kakebo - Sistema de Finanzas Personales 💰
 
+> Docs hub: `docs/README.md` — primary project documentation and API contract (`docs/api-contract.md`).
+
 Aplicación web para gestionar ingresos y gastos basada en el método **Kakebo** (家計簿) japonés.
 
 **Stack**: Spring Boot 3.x (backend) + SvelteKit 2 (frontend) + PostgreSQL/H2
