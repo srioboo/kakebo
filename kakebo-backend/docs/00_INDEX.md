@@ -1,5 +1,7 @@
 # 📑 Índice de Documentación - Kakebo Backend
 
+> Repository wiki: `../../docs/README.md` — project-level documentation and API contract (`../../docs/api-contract.md`).
+
 **Última actualización:** 3 de Abril de 2026
 
 ## 🚀 Inicio Rápido (Comienza Aquí)

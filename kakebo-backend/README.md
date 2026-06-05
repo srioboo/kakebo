@@ -1,5 +1,7 @@
 # Kakebo Backend
 
+> Repository docs: `../docs/README.md` (repository wiki) — see `../docs/api-contract.md` for the canonical API contract.
+
 Kakebo personal finances project backend - Spring Boot 4.x con arquitectura hexagonal.
 
 **🚀 [Ir a Documentación →](docs/00_INDEX.md)**
