@@ -37,9 +37,219 @@ print_info() {
     echo -e "${YELLOW}ℹ $1${NC}"
 }
 
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+runtime_label() {
+    case "$1" in
+        docker) echo "Docker" ;;
+        podman) echo "Podman" ;;
+        *) echo "$1" ;;
+    esac
+}
+
+runtime_is_active() {
+    case "$1" in
+        docker)
+            command_exists docker && docker info >/dev/null 2>&1
+            ;;
+        podman)
+            command_exists podman && podman info >/dev/null 2>&1
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+runtime_available() {
+    case "$1" in
+        docker) command_exists docker ;;
+        podman) command_exists podman ;;
+        *) return 1 ;;
+    esac
+}
+
+wait_for_runtime() {
+    local runtime="$1"
+    local retries=30
+    local count=0
+
+    while [ "$count" -lt "$retries" ]; do
+        if runtime_is_active "$runtime"; then
+            return 0
+        fi
+
+        sleep 2
+        count=$((count + 1))
+    done
+
+    return 1
+}
+
+show_runtime_selector() {
+    local options=("$@")
+    local selected_runtime=""
+    local index=1
+
+    print_header "Runtime requerido"
+    print_info "No detectamos un runtime activo. Elige cuál quieres arrancar:"
+    echo
+
+    for runtime in "${options[@]}"; do
+        case "$runtime" in
+            docker)
+                echo "  ${index}) Docker ($(if runtime_is_active docker; then echo activo; else echo inactivo; fi))"
+                ;;
+            podman)
+                echo "  ${index}) Podman ($(if runtime_is_active podman; then echo activo; else echo inactivo; fi))"
+                ;;
+        esac
+        index=$((index + 1))
+    done
+
+    echo "  q) Cancelar"
+    echo
+
+    while true; do
+        read -r -p "Selecciona una opción: " choice
+        case "$choice" in
+            1)
+                selected_runtime="${options[0]}"
+                ;;
+            2)
+                if [ "${#options[@]}" -ge 2 ]; then
+                    selected_runtime="${options[1]}"
+                else
+                    print_error "Opción inválida"
+                    continue
+                fi
+                ;;
+            q|Q)
+                return 1
+                ;;
+            *)
+                print_error "Opción inválida"
+                continue
+                ;;
+        esac
+
+        SELECTED_RUNTIME="$selected_runtime"
+        return 0
+    done
+}
+
+start_runtime() {
+    local runtime="$1"
+
+    print_header "Preparando $(runtime_label "$runtime")"
+
+    case "$runtime" in
+        docker)
+            if [[ "$OSTYPE" == darwin* ]]; then
+                if command_exists open; then
+                    print_info "Abriendo Docker Desktop..."
+                    open -a Docker >/dev/null 2>&1 || open -a "Docker Desktop" >/dev/null 2>&1 || true
+                else
+                    print_error "No se pudo abrir Docker Desktop automáticamente"
+                fi
+            else
+                if command_exists systemctl; then
+                    if systemctl --user start docker >/dev/null 2>&1 || systemctl start docker >/dev/null 2>&1; then
+                        print_info "Solicitado arranque de Docker"
+                    else
+                        print_error "No se pudo arrancar Docker automáticamente"
+                    fi
+                else
+                    print_error "No se encontró systemctl para iniciar Docker"
+                fi
+            fi
+            ;;
+        podman)
+            if command_exists podman; then
+                if [[ "$OSTYPE" == darwin* ]]; then
+                    print_info "Arrancando Podman machine..."
+                    podman machine start >/dev/null 2>&1 || true
+                else
+                    if command_exists systemctl && systemctl --user start podman >/dev/null 2>&1; then
+                        print_info "Solicitado arranque de Podman"
+                    else
+                        print_info "Intentando arrancar Podman machine..."
+                        podman machine start >/dev/null 2>&1 || true
+                    fi
+                fi
+            else
+                print_error "No se encontró el comando podman"
+            fi
+            ;;
+        *)
+            print_error "Runtime desconocido: $runtime"
+            return 1
+            ;;
+    esac
+
+    print_info "Esperando a que $(runtime_label "$runtime") esté listo..."
+    if wait_for_runtime "$runtime"; then
+        print_success "$(runtime_label "$runtime") está listo"
+        return 0
+    fi
+
+    print_error "$(runtime_label "$runtime") no respondió a tiempo"
+    print_info "Abre $(runtime_label "$runtime") manualmente y vuelve a ejecutar el script"
+    return 1
+}
+
+ensure_runtime_ready() {
+    local available_runtimes=()
+    local docker_available=0
+    local podman_available=0
+    local docker_active=0
+    local podman_active=0
+
+    if runtime_available docker; then
+        docker_available=1
+        available_runtimes+=("docker")
+    fi
+
+    if runtime_available podman; then
+        podman_available=1
+        available_runtimes+=("podman")
+    fi
+
+    runtime_is_active docker && docker_active=1
+    runtime_is_active podman && podman_active=1
+
+    if [ "$docker_available" -eq 0 ] && [ "$podman_available" -eq 0 ]; then
+        print_error "No se encontró Docker ni Podman en el sistema"
+        print_info "Instala Docker Desktop o Podman y vuelve a ejecutar el script"
+        return 1
+    fi
+
+    if [ "${#available_runtimes[@]}" -eq 1 ] && runtime_is_active "${available_runtimes[0]}"; then
+        print_success "$(runtime_label "${available_runtimes[0]}") ya está activo"
+        return 0
+    fi
+
+    if ! show_runtime_selector "${available_runtimes[@]}"; then
+        return 1
+    fi
+
+    if runtime_is_active "$SELECTED_RUNTIME"; then
+        print_success "$(runtime_label "$SELECTED_RUNTIME") ya está activo"
+        return 0
+    fi
+
+    start_runtime "$SELECTED_RUNTIME"
+}
+
 # Iniciar backend
 start_backend() {
     print_header "Iniciando Backend (Spring Boot)"
+
+    if ! ensure_runtime_ready; then
+        return 1
+    fi
     
     if [ -d "$BACKEND_DIR" ]; then
         cd "$BACKEND_DIR"
@@ -87,6 +297,10 @@ start_frontend() {
 # Iniciar ambos servicios en background
 start_all() {
     print_header "Kakebo Development Environment"
+
+    if ! ensure_runtime_ready; then
+        return 1
+    fi
     
     # Verificar puerto 9090
     if lsof -Pi :9090 -sTCP:LISTEN -t >/dev/null 2>&1; then
@@ -243,6 +457,7 @@ show_help() {
     echo ""
     echo -e "${YELLOW}Notas:${NC}"
     echo -e "    - El primer inicio puede tardar más (descarga dependencias)"
+    echo -e "    - El arranque comprueba Docker/Podman y te pide elegir si ambos están disponibles"
     echo -e "    - Frontend está en http://localhost:5173"
     echo -e "    - Backend está en http://localhost:9090"
     echo -e "    - Swagger en http://localhost:9090/swagger-ui.html"
