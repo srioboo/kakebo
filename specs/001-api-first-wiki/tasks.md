@@ -16,8 +16,8 @@
 **Purpose**: Capture the current interface surface and documentation entry
 points before writing the shared contract.
 
-- [ ] T001 [P] [US1] Inventory the current API surface in `kakebo-backend/src/main/java/org/sirantar/kakebo/expenses/infrastructure/rest/ExpensesController.java`, `kakebo-backend/src/main/java/org/sirantar/kakebo/income/infrastructure/rest/IncomeController.java`, `kakebo-front/src/lib/api.ts`, `kakebo-front/src/routes/+page.server.ts`, `kakebo-front/src/routes/expenses/+page.server.ts`, and `kakebo-front/src/routes/incomes/+page.server.ts`.
-- [ ] T002 [P] [US1] Inventory current documentation entry points in `README.md`, `kakebo-backend/README.md`, `kakebo-backend/docs/00_INDEX.md`, and `kakebo-front/README.md` so the shared contract and wiki can replace duplicated guidance.
+- [x] T001 [P] [US1] Inventory the current API surface in `kakebo-backend/src/main/java/org/sirantar/kakebo/expenses/infrastructure/rest/ExpensesController.java`, `kakebo-backend/src/main/java/org/sirantar/kakebo/income/infrastructure/rest/IncomeController.java`, `kakebo-front/src/lib/api.ts`, `kakebo-front/src/routes/+page.server.ts`, `kakebo-front/src/routes/expenses/+page.server.ts`, and `kakebo-front/src/routes/incomes/+page.server.ts`.
+- [x] T002 [P] [US1] Inventory current documentation entry points in `README.md`, `kakebo-backend/README.md`, `kakebo-backend/docs/00_INDEX.md`, and `kakebo-front/README.md` so the shared contract and wiki can replace duplicated guidance.
 
 **Checkpoint**: The current contract and documentation gaps are understood.
 
@@ -28,8 +28,8 @@ points before writing the shared contract.
 **Purpose**: Define the single contract that backend and frontend should point
 to.
 
-- [ ] T003 [US1] Create `docs/api-contract.md` as the canonical project contract using the current `Expenses` and `Incomes` response shapes, endpoint list, and ownership rules.
-- [ ] T004 [US1] Cross-reference the contract from any source comments or doc notes that currently describe the same API shape, keeping `kakebo-front/src/lib/api.ts` and backend controller notes aligned with `docs/api-contract.md`.
+- [x] T003 [US1] Create `docs/api-contract.md` as the canonical project contract using the current `Expenses` and `Incomes` response shapes, endpoint list, and ownership rules.
+- [x] T004 [US1] Cross-reference the contract from any source comments or doc notes that currently describe the same API shape, keeping `kakebo-front/src/lib/api.ts` and backend controller notes aligned with `docs/api-contract.md`.
 
 **Checkpoint**: The project has one shared contract reference.
 
@@ -40,9 +40,9 @@ to.
 **Purpose**: Add the repository-level wiki that explains the current project
 state and usage.
 
-- [ ] T005 [US2] Create `docs/README.md` as the wiki home with navigation to the contract, project state, and usage pages.
-- [ ] T006 [US2] Create `docs/project-state.md` describing the current project structure, active backend/frontend areas, and the separate admin project boundary.
-- [ ] T007 [US2] Create `docs/usage.md` with setup and usage guidance for the repository-level project wiki.
+- [x] T005 [US2] Create `docs/README.md` as the wiki home with navigation to the contract, project state, and usage pages.
+- [x] T006 [US2] Create `docs/project-state.md` describing the current project structure, active backend/frontend areas, and the separate admin project boundary.
+- [x] T007 [US2] Create `docs/usage.md` with setup and usage guidance for the repository-level project wiki.
 
 **Checkpoint**: The wiki area exists and documents the current state of the project.
 
@@ -53,9 +53,9 @@ state and usage.
 **Purpose**: Make the main docs and project readmes point to the shared wiki and
 contract.
 
-- [ ] T008 [P] [US3] Update `README.md` so the repository root points first to `docs/README.md` and `docs/api-contract.md` as the main project documentation entry points.
-- [ ] T009 [P] [US3] Update `kakebo-backend/README.md` and `kakebo-backend/docs/00_INDEX.md` to link to the repository wiki and avoid repeating top-level project summaries.
-- [ ] T010 [P] [US3] Update `kakebo-front/README.md` to point contributors to the shared wiki and contract before the frontend-specific usage notes.
+- [x] T008 [P] [US3] Update `README.md` so the repository root points first to `docs/README.md` and `docs/api-contract.md` as the main project documentation entry points.
+- [x] T009 [P] [US3] Update `kakebo-backend/README.md` and `kakebo-backend/docs/00_INDEX.md` to link to the repository wiki and avoid repeating top-level project summaries.
+- [x] T010 [P] [US3] Update `kakebo-front/README.md` to point contributors to the shared wiki and contract before the frontend-specific usage notes.
 
 **Checkpoint**: The main documentation entry points all lead to the same story.
 
@@ -66,7 +66,7 @@ contract.
 **Purpose**: Verify that the docs now present one coherent view of the
 project.
 
-- [ ] T011 [US3] Review all touched documentation for duplicate, conflicting, or outdated guidance and tighten wording in `README.md`, `kakebo-backend/README.md`, `kakebo-backend/docs/00_INDEX.md`, `kakebo-front/README.md`, and the new `docs/*.md` pages.
+- [x] T011 [US3] Review all touched documentation for duplicate, conflicting, or outdated guidance and tighten wording in `README.md`, `kakebo-backend/README.md`, `kakebo-backend/docs/00_INDEX.md`, `kakebo-front/README.md`, and the new `docs/*.md` pages.
 
 **Checkpoint**: The repository presents one consistent contract and wiki.
 

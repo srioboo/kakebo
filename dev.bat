@@ -48,6 +48,10 @@ if not exist "%BACKEND_DIR%" (
 )
 
 cd /d "%BACKEND_DIR%"
+
+call :ensure_runtime_ready
+if errorlevel 1 exit /b 1
+
 echo %YELLOW%[INFO]%RESET% Puerto: http://localhost:9090
 echo %YELLOW%[INFO]%RESET% Swagger: http://localhost:9090/swagger-ui.html
 echo %YELLOW%[INFO]%RESET% Presiona Ctrl+C para detener
@@ -100,6 +104,9 @@ REM Simplemente abrir dos ventanas de comando
 echo %YELLOW%[INFO]%RESET% Abriendo ventanas de terminal...
 echo.
 
+call :ensure_runtime_ready
+if errorlevel 1 exit /b 1
+
 REM Backend
 start "Kakebo Backend" cmd /k "cd /d "%BACKEND_DIR%" && (if exist Makefile (make start) else (mvnw spring-boot:run -Dspring.profiles.active=dev))"
 
@@ -116,6 +123,161 @@ echo %GREEN%Backend:%RESET%   http://localhost:9090
 echo %GREEN%Swagger:%RESET%   http://localhost:9090/swagger-ui.html
 echo.
 exit /b 0
+
+:ensure_runtime_ready
+set "DOCKER_AVAILABLE=0"
+set "PODMAN_AVAILABLE=0"
+set "DOCKER_ACTIVE=0"
+set "PODMAN_ACTIVE=0"
+
+where docker >nul 2>&1 && set "DOCKER_AVAILABLE=1"
+where podman >nul 2>&1 && set "PODMAN_AVAILABLE=1"
+
+docker info >nul 2>&1 && set "DOCKER_ACTIVE=1"
+podman info >nul 2>&1 && set "PODMAN_ACTIVE=1"
+
+if "%DOCKER_AVAILABLE%"=="0" if "%PODMAN_AVAILABLE%"=="0" (
+    echo %RED%[ERROR]%RESET% No se encontró Docker ni Podman en el sistema
+    echo %YELLOW%[INFO]%RESET% Instala Docker Desktop o Podman y vuelve a ejecutar el script
+    exit /b 1
+)
+
+if "%DOCKER_AVAILABLE%"=="1" if "%PODMAN_AVAILABLE%"=="1" goto choose_runtime
+
+if "%DOCKER_AVAILABLE%"=="1" if "%DOCKER_ACTIVE%"=="1" (
+    echo %GREEN%[OK]%RESET% Docker ya está activo
+    exit /b 0
+)
+
+if "%PODMAN_AVAILABLE%"=="1" if "%PODMAN_ACTIVE%"=="1" (
+    echo %GREEN%[OK]%RESET% Podman ya está activo
+    exit /b 0
+)
+
+if "%DOCKER_AVAILABLE%"=="1" goto choose_docker
+
+goto choose_podman
+
+:choose_docker
+echo.
+echo %BLUE%================================%RESET%
+echo %BLUE%Runtime requerido%RESET%
+echo %BLUE%================================%RESET%
+echo.
+echo %YELLOW%[INFO]%RESET% No detectamos un runtime activo. Elige qué quieres arrancar:
+echo.
+echo   1) Docker
+echo   q) Cancelar
+echo.
+choice /C 1Q /N /M "Selecciona una opción: "
+if errorlevel 2 exit /b 1
+set "SELECTED_RUNTIME=docker"
+call :start_runtime
+exit /b !errorlevel!
+
+:choose_podman
+echo.
+echo %BLUE%================================%RESET%
+echo %BLUE%Runtime requerido%RESET%
+echo %BLUE%================================%RESET%
+echo.
+echo %YELLOW%[INFO]%RESET% No detectamos un runtime activo. Elige qué quieres arrancar:
+echo.
+echo   1) Podman
+echo   q) Cancelar
+echo.
+choice /C 1Q /N /M "Selecciona una opción: "
+if errorlevel 2 exit /b 1
+set "SELECTED_RUNTIME=podman"
+call :start_runtime
+exit /b !errorlevel!
+
+:choose_runtime
+echo.
+echo %BLUE%================================%RESET%
+echo %BLUE%Runtime requerido%RESET%
+echo %BLUE%================================%RESET%
+echo.
+echo %YELLOW%[INFO]%RESET% No detectamos un runtime activo. Elige cuál quieres arrancar:
+echo.
+echo   1) Docker
+echo   2) Podman
+echo   3) Cancelar
+echo.
+choice /C 123 /N /M "Selecciona una opción: "
+if errorlevel 3 (
+    exit /b 1
+)
+if errorlevel 2 (
+    set "SELECTED_RUNTIME=podman"
+)
+if errorlevel 1 (
+    set "SELECTED_RUNTIME=docker"
+)
+
+call :start_runtime
+exit /b !errorlevel!
+
+:start_runtime
+if "%SELECTED_RUNTIME%"=="docker" goto start_docker
+if "%SELECTED_RUNTIME%"=="podman" goto start_podman
+echo %RED%[ERROR]%RESET% Runtime desconocido: %SELECTED_RUNTIME%
+exit /b 1
+
+:start_docker
+echo %YELLOW%[INFO]%RESET% Preparando Docker...
+if exist "%ProgramFiles%\Docker\Docker\Docker Desktop.exe" (
+    start "" "%ProgramFiles%\Docker\Docker\Docker Desktop.exe"
+) else if exist "%ProgramFiles(x86)%\Docker\Docker\Docker Desktop.exe" (
+    start "" "%ProgramFiles(x86)%\Docker\Docker\Docker Desktop.exe"
+) else (
+    echo %YELLOW%[INFO]%RESET% Abre Docker Desktop manualmente si no se inicia automáticamente
+)
+
+call :wait_for_runtime docker
+if errorlevel 1 (
+    echo %RED%[ERROR]%RESET% Docker no respondió a tiempo
+    echo %YELLOW%[INFO]%RESET% Vuelve a intentarlo después de abrir Docker Desktop
+    exit /b 1
+)
+
+echo %GREEN%[OK]%RESET% Docker está listo
+exit /b 0
+
+:start_podman
+echo %YELLOW%[INFO]%RESET% Preparando Podman...
+podman machine start
+if errorlevel 1 (
+    echo %YELLOW%[INFO]%RESET% No se pudo arrancar Podman machine automáticamente
+)
+
+call :wait_for_runtime podman
+if errorlevel 1 (
+    echo %RED%[ERROR]%RESET% Podman no respondió a tiempo
+    echo %YELLOW%[INFO]%RESET% Vuelve a intentarlo después de arrancar Podman
+    exit /b 1
+)
+
+echo %GREEN%[OK]%RESET% Podman está listo
+exit /b 0
+
+:wait_for_runtime
+set "RUNTIME_NAME=%~1"
+set /a WAIT_COUNT=0
+
+:wait_for_runtime_loop
+if /I "%RUNTIME_NAME%"=="docker" (
+    docker info >nul 2>&1 && exit /b 0
+)
+
+if /I "%RUNTIME_NAME%"=="podman" (
+    podman info >nul 2>&1 && exit /b 0
+)
+
+if !WAIT_COUNT! GEQ 30 exit /b 1
+timeout /t 2 /nobreak >nul
+set /a WAIT_COUNT+=1
+goto wait_for_runtime_loop
 
 :stop_all
 echo.
@@ -183,6 +345,7 @@ echo   dev.bat status             # Ver qué está corriendo
 echo.
 echo %YELLOW%Notas:%RESET%
 echo   - El primer inicio puede tardar más (descarga dependencias)
+echo   - El arranque comprueba Docker/Podman y muestra un selector si hace falta
 echo   - Frontend está en http://localhost:5173
 echo   - Backend está en http://localhost:9090
 echo   - Swagger en http://localhost:9090/swagger-ui.html

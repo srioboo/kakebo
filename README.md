@@ -28,6 +28,8 @@ cd kakebo
 dev.bat start
 ```
 
+> `dev.sh start` y `dev.bat start` comprueban Docker/Podman al inicio y muestran un selector si hace falta arrancar el runtime.
+
 **¡Listo!** Abre tu navegador:
 - 🌐 Frontend: http://localhost:5173
 - 🔗 Backend: http://localhost:9090
