@@ -12,7 +12,7 @@ Kakebo personal finances project backend - Spring Boot 4.x con arquitectura hexa
 ./mvnw spring-boot:run -Dspring.profiles.active=dev
 ```
 
-> Si arrancas desde la raíz con `dev.sh start` o `dev.bat start`, el helper comprobará Docker/Podman y te pedirá elegir un runtime si no hay uno activo.
+> Si arrancas desde la raíz con `dev.sh start` o `dev.bat start`, el helper comprobará Docker/Podman y te pedirá elegir un runtime si no hay uno activo. `dev.sh` también activa Java 21.0.2-graalce con SDKMAN antes de iniciar el backend.
 
 Luego abre: http://localhost:9090/swagger-ui.html
 

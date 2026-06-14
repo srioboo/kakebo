@@ -71,6 +71,70 @@ runtime_available() {
     esac
 }
 
+sdkman_init() {
+    local sdkman_dir="${SDKMAN_DIR:-$HOME/.sdkman}"
+    local sdkman_init_script="$sdkman_dir/bin/sdkman-init.sh"
+
+    if [ ! -s "$sdkman_init_script" ]; then
+        return 1
+    fi
+
+    # shellcheck disable=SC1090
+    . "$sdkman_init_script" >/dev/null 2>&1
+}
+
+project_java_version() {
+    if [ ! -f "$PROJECT_ROOT/.sdkmanrc" ]; then
+        return 1
+    fi
+
+    grep '^java=' "$PROJECT_ROOT/.sdkmanrc" | head -n 1 | cut -d= -f2-
+}
+
+ensure_project_java() {
+    local required_java
+    local active_java
+
+    required_java="$(project_java_version)"
+
+    if [ -z "$required_java" ]; then
+        print_error "No se encontró la versión Java del proyecto"
+        print_info "Crea o actualiza .sdkmanrc con la versión requerida"
+        return 1
+    fi
+
+    if ! command_exists sdk; then
+        if ! sdkman_init; then
+            print_error "SDKMAN no está disponible en este entorno"
+            print_info "Instala SDKMAN o activa manualmente Java ${required_java}"
+            return 1
+        fi
+    fi
+
+    if ! command_exists sdk; then
+        print_error "SDKMAN no está disponible en este entorno"
+        print_info "Instala SDKMAN o activa manualmente Java ${required_java}"
+        return 1
+    fi
+
+    if ! sdk env install >/dev/null 2>&1; then
+        print_error "No se pudo activar Java ${required_java} con SDKMAN"
+        print_info "Ejecuta 'sdk install java ${required_java}' y vuelve a intentarlo"
+        return 1
+    fi
+
+    if ! sdk env >/dev/null 2>&1; then
+        print_error "No se pudo cargar el entorno Java del proyecto"
+        print_info "Ejecuta 'sdk env' manualmente desde la raíz del repositorio"
+        return 1
+    fi
+
+    active_java="$(java -version 2>&1 | head -n 1)"
+    print_success "Java del proyecto activado (${required_java})"
+    print_info "Activo ahora: ${active_java}"
+    return 0
+}
+
 wait_for_runtime() {
     local runtime="$1"
     local retries=30
@@ -250,6 +314,10 @@ start_backend() {
     if ! ensure_runtime_ready; then
         return 1
     fi
+
+    if ! ensure_project_java; then
+        return 1
+    fi
     
     if [ -d "$BACKEND_DIR" ]; then
         cd "$BACKEND_DIR"
@@ -299,6 +367,10 @@ start_all() {
     print_header "Kakebo Development Environment"
 
     if ! ensure_runtime_ready; then
+        return 1
+    fi
+
+    if ! ensure_project_java; then
         return 1
     fi
     
@@ -458,6 +530,7 @@ show_help() {
     echo -e "${YELLOW}Notas:${NC}"
     echo -e "    - El primer inicio puede tardar más (descarga dependencias)"
     echo -e "    - El arranque comprueba Docker/Podman y te pide elegir si ambos están disponibles"
+    echo -e "    - SDKMAN activa Java 21.0.2-graalce automáticamente antes de iniciar el backend"
     echo -e "    - Frontend está en http://localhost:5173"
     echo -e "    - Backend está en http://localhost:9090"
     echo -e "    - Swagger en http://localhost:9090/swagger-ui.html"

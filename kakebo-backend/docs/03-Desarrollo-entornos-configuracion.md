@@ -377,7 +377,7 @@ spring.datasource.password=secret
 # Ver versión actual
 java -version
 
-# Debe ser Java 21+ (según pom.xml: <java.version>25</java.version>)
+# Debe ser Java 21+ (según pom.xml: <java.version>21</java.version>)
 # Si es vieja, actualiza tu JDK
 ```
 
@@ -436,4 +436,3 @@ spring.flyway.enabled=false
 - [Arquitectura & Patrones](02-Arquitectura-hexagonal-patrones.md)
 - [Testing & Errores](04-Testing-patrones-errores-comunes.md)
 - [Calidad de Código](05-CalidadCodigo-sonarqube-cobertura.md)
-
