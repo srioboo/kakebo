@@ -14,6 +14,7 @@ Aplicación web para gestionar ingresos y gastos basada en el método **Kakebo**
 - **Java 21+** - Para Spring Boot (`java -version`)
 - **Node.js 18+** - Para SvelteKit (`node -v`)
 - **npm** - Gestor de paquetes (`npm -v`)
+- **SDKMAN** - Para activar automáticamente la versión correcta de Java al arrancar con `dev.sh`
 
 ### ⚡ La Forma Más Rápida
 
@@ -28,7 +29,7 @@ cd kakebo
 dev.bat start
 ```
 
-> `dev.sh start` y `dev.bat start` comprueban Docker/Podman al inicio y muestran un selector si hace falta arrancar el runtime.
+> `dev.sh start` y `dev.bat start` comprueban Docker/Podman al inicio y muestran un selector si hace falta arrancar el runtime. `dev.sh` también activa Java 21.0.2-graalce con SDKMAN antes de iniciar el backend.
 
 **¡Listo!** Abre tu navegador:
 - 🌐 Frontend: http://localhost:5173

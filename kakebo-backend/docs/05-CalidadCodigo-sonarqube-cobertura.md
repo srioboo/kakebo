@@ -279,7 +279,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '25'
+          java-version: '21'
       
       - name: Build & Analyze
         run: make lint
@@ -384,4 +384,3 @@ target/
 ---
 
 **¡Listo!** Ahora tienes un sistema robusto de calidad de código en lugar de herramientas fragmentadas (Checkstyle + PMD).
-

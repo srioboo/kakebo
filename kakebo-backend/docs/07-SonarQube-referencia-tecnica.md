@@ -223,7 +223,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
-          java-version: '25'
+          java-version: '21'
       - run: make lint
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -328,4 +328,3 @@ make lint    # Funciona sin Docker
 ---
 
 **¡Listo!** SonarQube está configurado y listo para usar. Empieza con `make lint`.
-
