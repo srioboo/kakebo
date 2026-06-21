@@ -1,15 +1,22 @@
 import { getExpenses, createExpense, updateExpense, deleteExpense, type Expense } from '$lib/api';
 import { fail } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export async function load() {
+export const load: PageServerLoad = async ({ url }) => {
+	const now = new Date();
+	const yearParam = url.searchParams.get('year');
+	const monthParam = url.searchParams.get('month');
+	const year = yearParam ? parseInt(yearParam) : now.getFullYear();
+	const month = monthParam ? parseInt(monthParam) : now.getMonth() + 1;
+
 	try {
-		const expenses = await getExpenses();
-		return { expenses };
+		const expenses = await getExpenses(year, month);
+		return { expenses, year, month };
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : 'Error loading expenses';
-		return { error: errorMessage, expenses: [] };
+		return { error: errorMessage, expenses: [], year, month };
 	}
-}
+};
 
 export const actions = {
 	create: async ({ request }) => {

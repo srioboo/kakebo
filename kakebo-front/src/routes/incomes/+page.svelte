@@ -3,14 +3,17 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { IncomeForm } from '$lib/components/forms';
 	import { IncomesTable } from '$lib/components/tables';
-	import { Modal, ConfirmDialog, LoadingSpinner } from '$lib/components/common';
-	import { notify } from '$lib/stores';
+	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
+	import { YearMonthSelector } from '$lib/components/filters';
+	import { notify, selectedPeriod } from '$lib/stores';
 	import type { Income } from '$lib/api';
 
 	export let data;
 
 	let incomes: Income[] = data.incomes || [];
 	let error = data.error || '';
+
+	$: selectedPeriod.set({ year: data.year, month: data.month });
 
 	let isModalOpen = false;
 	let isConfirmOpen = false;
@@ -34,6 +37,11 @@
 	function openDeleteConfirm(id: number) {
 		incomeToDelete = id;
 		isConfirmOpen = true;
+	}
+
+	function handlePeriodSelect(e: CustomEvent<{ year: number; month: number }>) {
+		const { year, month } = e.detail;
+		goto(`?year=${year}&month=${month}`);
 	}
 
 	async function handleFormSubmit(e: CustomEvent<Partial<Income>>) {
@@ -132,16 +140,32 @@
 		</div>
 	{/if}
 
-	<div class="kakebo-surface rounded-xl p-6">
-		{#if isLoading}
-			<LoadingSpinner size="md" />
-		{:else}
-			<IncomesTable
-				{incomes}
-				onEdit={openEditModal}
-				onDelete={openDeleteConfirm}
+	<div class="flex gap-6">
+		<aside class="kakebo-surface rounded-xl p-4">
+			<YearMonthSelector
+				currentYear={data.year}
+				currentMonth={data.month}
+				on:select={handlePeriodSelect}
 			/>
-		{/if}
+		</aside>
+
+		<div class="kakebo-surface flex-1 rounded-xl p-6">
+			{#if isLoading}
+				<LoadingSpinner size="md" />
+			{:else if incomes.length === 0}
+				<EmptyState
+					title="Sin ingresos"
+					description="No hay ingresos para el período seleccionado."
+					icon="💰"
+				/>
+			{:else}
+				<IncomesTable
+					{incomes}
+					onEdit={openEditModal}
+					onDelete={openDeleteConfirm}
+				/>
+			{/if}
+		</div>
 	</div>
 </div>
 

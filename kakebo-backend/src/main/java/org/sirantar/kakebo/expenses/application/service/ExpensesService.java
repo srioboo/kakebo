@@ -4,6 +4,8 @@ import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.sirantar.kakebo.expenses.domain.repository.ExpensesRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +17,8 @@ public class ExpensesService {
 		this.expensesRepository = expensesRepository;
 	}
 
-	public Iterable<Expenses> getExpenses() {
-		return expensesRepository.findAll();
+	public List<Expenses> getExpenses(int year, int month) {
+		return expensesRepository.findByYearAndMonth(year, month);
 	}
 
 	public Expenses getExpenseById(Long id) {

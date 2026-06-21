@@ -5,11 +5,16 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.sirantar.kakebo.income.application.service.IncomeService;
 import org.sirantar.kakebo.income.domain.model.Incomes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 
 @RestController
+@CrossOrigin(origins = "https://localhost:5173")
 @RequestMapping("/")
 public class IncomeController {
 
@@ -21,9 +26,25 @@ public class IncomeController {
 	}
 
 	@GetMapping("/incomes")
-	@Operation(summary = "Get all incomes", description = "Retrieve a list of all incomes")
-	public ResponseEntity<Iterable<Incomes>> getIncomes() {
-		return ResponseEntity.ok(incomeService.getIncomes());
+	@Operation(summary = "Get incomes by period", description = "Retrieve incomes for a given year and month; defaults to current month when omitted")
+	public ResponseEntity<Iterable<Incomes>> getIncomes(
+		@RequestParam(required = false)
+		@Parameter(description = "Year (e.g. 2026). Defaults to current year.") Integer year,
+		@RequestParam(required = false)
+		@Parameter(description = "Month 1–12. Defaults to current month.") Integer month) {
+
+		if (month != null && (month < 1 || month > 12)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid month: must be between 1 and 12");
+		}
+		if (year != null && year < 2000) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid year: must be >= 2000");
+		}
+
+		LocalDate now = LocalDate.now();
+		int effectiveYear = year != null ? year : now.getYear();
+		int effectiveMonth = month != null ? month : now.getMonthValue();
+
+		return ResponseEntity.ok(incomeService.getIncomes(effectiveYear, effectiveMonth));
 	}
 
 	@GetMapping("/incomes/{id}")

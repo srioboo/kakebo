@@ -174,9 +174,13 @@ async function fetchApi<T>(
 // Expenses API
 // ============================================================================
 
-export async function getExpenses(): Promise<Expense[]> {
+export async function getExpenses(year?: number, month?: number): Promise<Expense[]> {
 	try {
-		const response = await fetchApi<Expense[]>('/expenses');
+		const params = new URLSearchParams();
+		if (year !== undefined) params.set('year', year.toString());
+		if (month !== undefined) params.set('month', month.toString());
+		const query = params.toString();
+		const response = await fetchApi<Expense[]>(`/expenses${query ? `?${query}` : ''}`);
 		return Array.isArray(response) ? response : [];
 	} catch (error) {
 		console.error('Error fetching expenses:', error);
@@ -248,9 +252,13 @@ export async function deleteExpense(id: number): Promise<void> {
 // Incomes API
 // ============================================================================
 
-export async function getIncomes(): Promise<Income[]> {
+export async function getIncomes(year?: number, month?: number): Promise<Income[]> {
 	try {
-		const response = await fetchApi<Income[]>('/incomes');
+		const params = new URLSearchParams();
+		if (year !== undefined) params.set('year', year.toString());
+		if (month !== undefined) params.set('month', month.toString());
+		const query = params.toString();
+		const response = await fetchApi<Income[]>(`/incomes${query ? `?${query}` : ''}`);
 		return Array.isArray(response) ? response : [];
 	} catch (error) {
 		console.error('Error fetching incomes:', error);
