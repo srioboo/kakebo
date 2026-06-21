@@ -3,14 +3,17 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { ExpenseForm } from '$lib/components/forms';
 	import { ExpensesTable } from '$lib/components/tables';
-	import { Modal, ConfirmDialog, LoadingSpinner } from '$lib/components/common';
-	import { notify } from '$lib/stores';
+	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
+	import { YearMonthSelector } from '$lib/components/filters';
+	import { notify, selectedPeriod } from '$lib/stores';
 	import type { Expense } from '$lib/api';
 
 	export let data;
 
 	let expenses: Expense[] = data.expenses || [];
 	let error = data.error || '';
+
+	$: selectedPeriod.set({ year: data.year, month: data.month });
 
 	let isModalOpen = false;
 	let isConfirmOpen = false;
@@ -34,6 +37,11 @@
 	function openDeleteConfirm(id: number) {
 		expenseToDelete = id;
 		isConfirmOpen = true;
+	}
+
+	function handlePeriodSelect(e: CustomEvent<{ year: number; month: number }>) {
+		const { year, month } = e.detail;
+		goto(`?year=${year}&month=${month}`);
 	}
 
 	async function handleFormSubmit(e: CustomEvent<Partial<Expense>>) {
@@ -132,16 +140,32 @@
 		</div>
 	{/if}
 
-	<div class="kakebo-surface rounded-xl p-6">
-		{#if isLoading}
-			<LoadingSpinner size="md" />
-		{:else}
-			<ExpensesTable
-				{expenses}
-				onEdit={openEditModal}
-				onDelete={openDeleteConfirm}
+	<div class="flex gap-6">
+		<aside class="kakebo-surface rounded-xl p-4">
+			<YearMonthSelector
+				currentYear={data.year}
+				currentMonth={data.month}
+				on:select={handlePeriodSelect}
 			/>
-		{/if}
+		</aside>
+
+		<div class="kakebo-surface flex-1 rounded-xl p-6">
+			{#if isLoading}
+				<LoadingSpinner size="md" />
+			{:else if expenses.length === 0}
+				<EmptyState
+					title="Sin gastos"
+					description="No hay gastos para el período seleccionado."
+					icon="💸"
+				/>
+			{:else}
+				<ExpensesTable
+					{expenses}
+					onEdit={openEditModal}
+					onDelete={openDeleteConfirm}
+				/>
+			{/if}
+		</div>
 	</div>
 </div>
 
