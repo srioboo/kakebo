@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { i18n } from '$lib/i18n';
 	import { AppBar, AppRail, AppRailAnchor, AppShell } from '$lib/components/layout';
+	import { YearMonthSelector } from '$lib/components/filters';
+	import { selectedPeriod } from '$lib/stores';
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
 	import '../app.css';
 
@@ -11,6 +14,26 @@
 		href === '/'
 			? page.url.pathname === '/'
 			: page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+
+	function getActivePeriod(): { year: number; month: number } {
+		const now = new Date();
+		const yearParam = page.url.searchParams.get('year');
+		const monthParam = page.url.searchParams.get('month');
+		return {
+			year: yearParam ? parseInt(yearParam) : now.getFullYear(),
+			month: monthParam ? parseInt(monthParam) : now.getMonth() + 1,
+		};
+	}
+
+	function handlePeriodSelect(e: CustomEvent<{ year: number; month: number }>) {
+		const { year, month } = e.detail;
+		goto(`${page.url.pathname}?year=${year}&month=${month}`);
+	}
+
+	$effect(() => {
+		const p = getActivePeriod();
+		selectedPeriod.set({ year: p.year, month: p.month });
+	});
 </script>
 
 <ParaglideJS {i18n}>
@@ -145,6 +168,16 @@
 					</svelte:fragment>
 					<span>Resumen</span>
 				</AppRailAnchor>
+
+				<div class="mt-3 border-t border-[var(--kb-border)] px-1 pt-3">
+					<p class="mb-2 px-1 text-xs font-semibold uppercase tracking-wide kakebo-muted">Período</p>
+					<YearMonthSelector
+						currentYear={getActivePeriod().year}
+						currentMonth={getActivePeriod().month}
+						on:select={handlePeriodSelect}
+					/>
+				</div>
+
 				<svelte:fragment slot="trail">
 					<AppRailAnchor href="/ayuda" title="Ayuda" active={isActive('/ayuda')}>
 						<svelte:fragment slot="lead">

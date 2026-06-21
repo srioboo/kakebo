@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { ExpenseForm } from '$lib/components/forms';
 	import { ExpensesTable } from '$lib/components/tables';
+	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
+	import { notify } from '$lib/stores';
 	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
 	import { YearMonthSelector } from '$lib/components/filters';
 	import { notify, selectedPeriod } from '$lib/stores';
@@ -140,6 +141,22 @@
 		</div>
 	{/if}
 
+	<div class="kakebo-surface rounded-xl p-6">
+		{#if isLoading}
+			<LoadingSpinner size="md" />
+		{:else if expenses.length === 0}
+			<EmptyState
+				title="Sin gastos"
+				description="No hay gastos para el período seleccionado."
+				icon="💸"
+			/>
+		{:else}
+			<ExpensesTable
+				{expenses}
+				onEdit={openEditModal}
+				onDelete={openDeleteConfirm}
+			/>
+		{/if}
 	<div class="flex gap-6">
 		<aside class="kakebo-surface rounded-xl p-4">
 			<YearMonthSelector
