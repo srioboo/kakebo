@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import {goto, invalidateAll} from '$app/navigation';
 	import { ExpenseForm } from '$lib/components/forms';
 	import { ExpensesTable } from '$lib/components/tables';
-	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
-	import { notify } from '$lib/stores';
 	import { Modal, ConfirmDialog, LoadingSpinner, EmptyState } from '$lib/components/common';
 	import { YearMonthSelector } from '$lib/components/filters';
 	import { notify, selectedPeriod } from '$lib/stores';
@@ -184,6 +182,7 @@
 			{/if}
 		</div>
 	</div>
+</div>
 </div>
 
 <Modal bind:open={isModalOpen} title={isEditing ? 'Editar Gasto' : 'Crear Nuevo Gasto'}>
