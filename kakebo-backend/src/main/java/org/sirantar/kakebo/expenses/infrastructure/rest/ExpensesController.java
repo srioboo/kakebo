@@ -5,9 +5,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.sirantar.kakebo.expenses.application.service.ExpensesService;
 import org.sirantar.kakebo.expenses.domain.model.Expenses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 
 @RestController
 @CrossOrigin(origins = "https://localhost:5173")
@@ -22,10 +26,25 @@ public class ExpensesController {
 	}
 
 	@GetMapping(path = "/expenses")
-	@Operation(summary = "Get all expenses", description = "Retrieve a list of all expenses")
-	public ResponseEntity<Iterable<Expenses>> getExpenses() {
-		// TODO - use DTO and conversors
-		return ResponseEntity.ok(expensesService.getExpenses());
+	@Operation(summary = "Get expenses by period", description = "Retrieve expenses for a given year and month; defaults to current month when omitted")
+	public ResponseEntity<Iterable<Expenses>> getExpenses(
+		@RequestParam(required = false)
+		@Parameter(description = "Year (e.g. 2026). Defaults to current year.") Integer year,
+		@RequestParam(required = false)
+		@Parameter(description = "Month 1–12. Defaults to current month.") Integer month) {
+
+		if (month != null && (month < 1 || month > 12)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid month: must be between 1 and 12");
+		}
+		if (year != null && year < 2000) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid year: must be >= 2000");
+		}
+
+		LocalDate now = LocalDate.now();
+		int effectiveYear = year != null ? year : now.getYear();
+		int effectiveMonth = month != null ? month : now.getMonthValue();
+
+		return ResponseEntity.ok(expensesService.getExpenses(effectiveYear, effectiveMonth));
 	}
 
 	@GetMapping(path = "/expenses/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

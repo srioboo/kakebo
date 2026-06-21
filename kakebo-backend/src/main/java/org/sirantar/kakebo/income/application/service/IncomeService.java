@@ -4,6 +4,7 @@ import org.sirantar.kakebo.income.domain.model.Incomes;
 import org.sirantar.kakebo.income.domain.repository.IncomeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +16,8 @@ public class IncomeService {
 		this.incomeRepository = incomeRepository;
 	}
 
-	public Iterable<Incomes> getIncomes() {
-		return incomeRepository.findAll();
+	public List<Incomes> getIncomes(int year, int month) {
+		return incomeRepository.findByYearAndMonth(year, month);
 	}
 
 	public Incomes getIncome(Long id) {

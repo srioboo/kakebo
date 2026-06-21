@@ -6,6 +6,21 @@
 import { writable } from 'svelte/store';
 
 // ============================================================================
+// Period Store (year/month filter shared across expenses and incomes)
+// ============================================================================
+
+export interface PeriodState {
+	year: number;
+	month: number;
+}
+
+const _now = new Date();
+export const selectedPeriod = writable<PeriodState>({
+	year: _now.getFullYear(),
+	month: _now.getMonth() + 1,
+});
+
+// ============================================================================
 // Filter Store
 // ============================================================================
 
