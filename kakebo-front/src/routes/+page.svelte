@@ -13,6 +13,8 @@
 		expenses?: WrappedList<Expense>;
 		incomes?: WrappedList<Income>;
 		error?: string;
+		year?: number;
+		month?: number;
 	};
 
 	const incomes = getList(data?.incomes);
@@ -23,8 +25,9 @@
 	const monthlyExpenses = expenses.reduce((total, item) => total + item.amount, 0);
 	const availableBudget = monthlyIncome - monthlyExpenses;
 
-	const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(new Date());
-	const currentMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+	const periodDate = new Date(data?.year ?? new Date().getFullYear(), (data?.month ?? new Date().getMonth() + 1) - 1);
+	const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(periodDate);
+	const currentMonth = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)} ${data?.year ?? new Date().getFullYear()}`;
 </script>
 
 <div class="mx-auto flex w-full max-w-7xl flex-col gap-6">
