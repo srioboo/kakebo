@@ -175,7 +175,7 @@
 
 	<section class="grid gap-4 xl:grid-cols-2">
 		<article class="kakebo-surface rounded-xl p-5">
-			<h2 class="text-lg font-semibold">Resumen mensual</h2>
+			<h2 class="text-lg font-semibold">Resumen mensual · {currentMonth}</h2>
 			<p class="kakebo-muted mt-1 text-sm">Cierre y reflexion</p>
 			<ul class="mt-4 space-y-2 text-sm">
 				<li><strong>¿Cuanto tienes para gastar?</strong> {formatCurrency(availableBudget)}</li>

@@ -1,28 +1,30 @@
 # Tasks: Selector de Período Global en Navegación
 
 **Input**: Design documents from `/specs/005-global-period-filter/`
-**Prerequisites**: spec.md (user stories), existing codebase analysis
+**Prerequisites**: spec.md (user stories), plan.md (tech context), clarification 2026-06-21
 
-**Context from feature 004**: Year/month filtering is already implemented in the backend (`GET /expenses?year=Y&month=M`, `GET /incomes?year=Y&month=M`). The `YearMonthSelector.svelte` component and `selectedPeriod` store already exist. This feature moves the selector from inside each page into the shared layout.
+**Context from feature 004**: Year/month filtering is already implemented in the backend (`GET /expenses?year=Y&month=M`, `GET /incomes?year=Y&month=M`). The `YearMonthSelector.svelte` component and `selectedPeriod` store already exist.
 
-**Organization**: Tasks grouped by user story to enable independent implementation and testing.
+**Organization**: Tasks grouped by user story. Phases 1–6 are complete (original implementation). Phase 7 adds tasks from the clarification session (2026-06-21): show selected month in the "Resumen mensual" section inside General and in the `/resumen` page heading.
 
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (US1, US2, US3)
+- **[Story]**: Which user story this task belongs to (US1, US2, US3, US4)
 - Exact file paths included in all descriptions
 
 ## Path Conventions
 
 ```text
 kakebo-front/src/
-├── routes/+layout.svelte              ← add global selector here
-├── routes/+page.server.ts             ← update to read year/month from URL
-├── routes/+page.svelte                ← update month name display
-├── routes/expenses/+page.svelte       ← remove embedded selector (US3)
-├── routes/incomes/+page.svelte        ← remove embedded selector (US3)
-├── lib/stores.ts                      ← selectedPeriod store (already exists)
+├── routes/+layout.svelte              ← global selector (done)
+├── routes/+page.server.ts             ← General: reads year/month from URL (done)
+├── routes/+page.svelte                ← General: dynamic heading + Resumen mensual section
+├── routes/resumen/+page.server.ts     ← NEW: read year/month from URL
+├── routes/resumen/+page.svelte        ← NEW: dynamic heading
+├── routes/expenses/+page.svelte       ← embedded selector removed (done)
+├── routes/incomes/+page.svelte        ← embedded selector removed (done)
+├── lib/stores.ts                      ← selectedPeriod store (done)
 └── lib/components/filters/
     └── YearMonthSelector.svelte       ← already exists (feature 004)
 ```
@@ -42,8 +44,6 @@ kakebo-front/src/
 
 **Purpose**: Add the period selector to the shared layout — BLOCKS US2 and US3 which depend on it being in the layout
 
-**⚠️ CRITICAL**: US2 and US3 cannot be validated until the layout selector is functional
-
 - [x] T003 Update `kakebo-front/src/routes/+layout.svelte`: import `YearMonthSelector` from `$lib/components/filters`; import `goto` from `$app/navigation`; derive `activeYear` and `activeMonth` from `page.url.searchParams` (defaulting to current date values when absent); add a `handlePeriodSelect` function that calls `goto(page.url.pathname + '?year=${year}&month=${month}')`
 - [x] T004 Update `kakebo-front/src/routes/+layout.svelte`: add `YearMonthSelector` component inside the AppRail default slot (below the last `AppRailAnchor` nav item, before the trail slot); pass `currentYear={activeYear}` and `currentMonth={activeMonth}` props; wire `on:select={handlePeriodSelect}`; add a visual section label "Período" above the selector
 
@@ -55,9 +55,7 @@ kakebo-front/src/
 
 **Goal**: The YearMonthSelector is always visible in the AppRail sidebar from any screen in the app.
 
-**Independent Test**: Navigate to `/`, `/diario`, `/expenses`, `/incomes`, `/resumen` — the sidebar shows the period selector at all times with the active period highlighted. Changing the month on any page updates the URL.
-
-### Implementation for User Story 1
+**Independent Test**: Navigate to `/`, `/diario`, `/expenses`, `/incomes`, `/resumen` — the sidebar shows the period selector at all times with the active period highlighted.
 
 - [x] T005 [US1] Verify `kakebo-front/src/routes/+layout.svelte` correctly derives active year/month: when URL has `?year=2020&month=1`, the selector highlights January 2020; when URL has no params, it highlights the current month/year
 - [x] T006 [US1] Verify the `YearMonthSelector` label in the AppRail does not overlap or hide any navigation anchors (General, Diario, Gastos, Ingresos, Resumen, Ayuda) on typical viewport sizes; adjust padding/spacing if needed
@@ -68,11 +66,9 @@ kakebo-front/src/
 
 ## Phase 4: User Story 2 - Período aplicado a todas las pantallas con datos (Priority: P1)
 
-**Goal**: Selecting a period in the global selector causes the General, Expenses, and Incomes pages to show only data from that period.
+**Goal**: Selecting a period in the global selector causes General, Expenses, and Incomes pages to show only data from that period.
 
-**Independent Test**: Select January 2020 in the sidebar selector from the General page — the General page shows incomes and expenses from January 2020 only. Navigate to Gastos — also shows January 2020 data. Navigate to Ingresos — same.
-
-### Implementation for User Story 2
+**Independent Test**: Select January 2020 in the sidebar selector from the General page — General shows incomes and expenses from January 2020 only. Navigate to Gastos — same. Navigate to Ingresos — same.
 
 - [x] T007 [US2] Update `kakebo-front/src/routes/+page.server.ts` (General): change `load()` to `load({ url })`, read `year` and `month` from `url.searchParams` defaulting to current date values, then call `getExpenses(year, month)` and `getIncomes(year, month)`; return `{ expenses, incomes, year, month }`
 - [x] T008 [US2] Update `kakebo-front/src/routes/+page.svelte` (General): replace hardcoded `new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(new Date())` with a dynamic month/year label built from `data.year` and `data.month`; update the "Portada mensual" heading to show the selected period (e.g., "Kakebo · Junio 2026")
@@ -84,27 +80,44 @@ kakebo-front/src/
 
 ## Phase 5: User Story 3 - Eliminar selectores embebidos en Gastos e Ingresos (Priority: P2)
 
-**Goal**: Expenses and Incomes pages no longer show their own embedded YearMonthSelector — only the global one in the sidebar is visible.
+**Goal**: Expenses and Incomes pages no longer show their own embedded YearMonthSelector.
 
 **Independent Test**: Navigate to `/expenses` and `/incomes` — neither page shows a YearMonthSelector aside panel. The global sidebar selector is the only period control visible.
-
-### Implementation for User Story 3
 
 - [x] T010 [US3] Remove from `kakebo-front/src/routes/expenses/+page.svelte`: the `import { YearMonthSelector } from '$lib/components/filters'` line; the `handlePeriodSelect` function; the `<aside>` containing `<YearMonthSelector>`; the `$: selectedPeriod.set(...)` reactive statement; replace the `<div class="flex gap-6">` layout wrapper with a single full-width container for the table/empty-state
 - [x] T011 [P] [US3] Remove from `kakebo-front/src/routes/incomes/+page.svelte`: the same set of items — `YearMonthSelector` import, `handlePeriodSelect`, the `<aside>`, the `$: selectedPeriod.set(...)` reactive statement; replace the flex layout with a full-width container
 - [x] T012 [US3] Remove the `import { selectedPeriod } from '$lib/stores'` line from both `expenses/+page.svelte` and `incomes/+page.svelte` IF `selectedPeriod` is no longer used on those pages after T010/T011 (the store sync is now managed by the layout)
 
-**Checkpoint**: US3 fully testable — Gastos and Incomes pages show only their table/empty-state with no embedded selector. The global sidebar remains the only period control.
+**Checkpoint**: US3 fully testable — Gastos and Incomes pages show only their table/empty-state with no embedded selector.
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 6: Polish (Original)
 
-**Purpose**: Type safety, sync cleanup, and visual verification
+**Purpose**: Type safety, sync cleanup, and initial verification
 
-- [x] T013 Move the `selectedPeriod` store sync into `kakebo-front/src/routes/+layout.svelte`: add `$: selectedPeriod.set({ year: activeYear, month: activeMonth })` so the store reflects the global URL state (useful for any future page that needs the store value)
+- [x] T013 Move the `selectedPeriod` store sync into `kakebo-front/src/routes/+layout.svelte`: add `$effect(() => { selectedPeriod.set({ year: ..., month: ... }) })` so the store reflects the global URL state
 - [x] T014 [P] Run `npm run check` in `kakebo-front/` and fix any TypeScript errors introduced by changes to layout, page.server.ts, or page.svelte files
-- [x] T015 [P] Manually verify the full navigation flow: open `/`, check period shows current month → select previous month in sidebar → General updates → navigate to Gastos → same month shown → navigate to Ingresos → same month shown → navigate to General → still same month
+- [x] T015 [P] Manually verify the full navigation flow: open `/`, check period shows current month → select previous month in sidebar → General updates → navigate to Gastos → same month shown → navigate to Ingresos → same month shown
+
+---
+
+## Phase 7: User Story 4 - Etiqueta de período en Resumen mensual (Clarificación 2026-06-21)
+
+**Goal**: The "Resumen mensual" section heading inside the General page AND the `/resumen` page heading both display the currently selected month and year.
+
+**Context**: FR-009 and FR-010 from the clarification. The `/resumen` page currently has static hardcoded data; only the heading needs to be dynamic. No data filtering is required for this route.
+
+**Independent Test**: Select March 2024 in the sidebar selector → navigate to General — the "Resumen mensual" section heading shows "Resumen mensual · Marzo 2024" → navigate to `/resumen` — the page heading also shows "Resumen mensual · Marzo 2024".
+
+### Implementation for User Story 4
+
+- [x] T016 [US4] Update `kakebo-front/src/routes/+page.svelte` (General): change the "Resumen mensual" article heading from `<h2 class="text-lg font-semibold">Resumen mensual</h2>` to `<h2 class="text-lg font-semibold">Resumen mensual · {currentMonth}</h2>` — `currentMonth` is already derived in the script block from `data.year` / `data.month`
+- [x] T017 [US4] Create `kakebo-front/src/routes/resumen/+page.server.ts`: export a `load({ url })` function that reads `year` and `month` from `url.searchParams` (defaulting to `new Date().getFullYear()` and `new Date().getMonth() + 1`); return `{ year, month }`
+- [x] T018 [US4] Update `kakebo-front/src/routes/resumen/+page.svelte`: add `export let data: { year: number; month: number }`; derive `currentMonth` using `new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(new Date(data.year, data.month - 1))` with capitalised first letter; update the page `<h1>` from `Resumen mensual` to `Resumen mensual · {currentMonth}`
+- [x] T019 [P] Run `npm run check` in `kakebo-front/` and fix any TypeScript errors introduced by T016–T018
+
+**Checkpoint**: US4 fully testable — "Resumen mensual · {mes} {año}" appears in both the General page section and the `/resumen` page heading when a period is selected in the sidebar.
 
 ---
 
@@ -112,79 +125,39 @@ kakebo-front/src/
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: Verify feature 004 artifacts exist — no code changes, start immediately
-- **Foundational (Phase 2)**: Add selector to layout — BLOCKS US1 validation and US2/US3 testing
-- **US1 (Phase 3)**: Depends on Phase 2; only layout verification and spacing adjustments
-- **US2 (Phase 4)**: Depends on Phase 2 (global selector must be present); T007–T009 can run in parallel
-- **US3 (Phase 5)**: Depends on Phase 2 (global selector must be present before removing embedded ones); T010/T011 can run in parallel
-- **Polish (Phase 6)**: Depends on US2 + US3 completion
+- **Phases 1–6**: Complete ✓
+- **Phase 7 (US4)**: No blocking dependencies — T016, T017, T018 can run in parallel (different files); T019 depends on all three
 
-### User Story Dependencies
+### Parallel Opportunities within Phase 7
 
-- **US1 (P1)**: Depends on Phase 2 (foundational layout changes)
-- **US2 (P1)**: Depends on Phase 2; independent of US3
-- **US3 (P2)**: Depends on Phase 2; should NOT be done before US2 is working (otherwise period filtering breaks)
-
-### Parallel Opportunities within Phases
-
-- T003 + T004 must be sequential (T004 uses what T003 adds to the script block)
-- T007 + T008 can run in parallel (different files)
-- T010 + T011 can run in parallel (different files)
-- T014 + T015 can run in parallel (check vs manual test)
-
----
-
-## Parallel Example: Phase 4 (US2)
+- T016, T017, T018 can run in parallel (different files)
+- T019 must run after T016–T018
 
 ```bash
-# After Phase 2 (layout selector working):
-
 # Run in parallel:
-Task T007: Update /routes/+page.server.ts (General load function)
-Task T008: Update /routes/+page.svelte (General month display)
+Task T016: Update General +page.svelte (Resumen mensual heading)
+Task T017: Create resumen/+page.server.ts
+Task T018: Update resumen/+page.svelte
 
-# T009 is just a verification — can run at same time
-Task T009: Verify expenses/incomes +page.server.ts already reads URL params
-```
-
-## Parallel Example: Phase 5 (US3)
-
-```bash
-# After Phase 2 and Phase 4 are confirmed working:
-
-# Run in parallel:
-Task T010: Remove embedded selector from expenses/+page.svelte
-Task T011: Remove embedded selector from incomes/+page.svelte
+# Then sequentially:
+Task T019: npm run check
 ```
 
 ---
 
 ## Implementation Strategy
 
-### MVP First (US1 + US2 only)
+### Remaining work (Phase 7 only)
 
-1. Complete Phase 1: Verify feature 004 artifacts
-2. Complete Phase 2: Add selector to AppRail layout
-3. Complete Phase 3 (US1): Verify selector visibility
-4. Complete Phase 4 (US2): Update General page server load
-5. **STOP and VALIDATE**: All data screens filter by selected period ✓
-6. Deploy/demo MVP
-
-### Incremental Delivery
-
-1. Phase 1+2 → global selector visible in sidebar
-2. Phase 3 (US1) → selector always present, URL updates on click
-3. Phase 4 (US2) → all data screens respect global period (MVP!)
-4. Phase 5 (US3) → clean up embedded selectors from Gastos/Ingresos
-5. Phase 6 → type safety + manual verification
+1. T016 + T017 + T018 in parallel (3 file changes)
+2. T019: type check
+3. Manual verify: select a period → check General "Resumen mensual · {mes}" → check `/resumen` "Resumen mensual · {mes}"
 
 ---
 
 ## Notes
 
-- `YearMonthSelector.svelte` already exists at `kakebo-front/src/lib/components/filters/YearMonthSelector.svelte` (feature 004)
-- The `+layout.svelte` already imports `page` from `$app/state` — use `page.url.searchParams` directly for year/month
-- `goto` from `$app/navigation` is what the page.svelte files already use; use the same pattern in the layout
-- The `selectedPeriod` store in `stores.ts` already exists; after US3, the canonical sync point moves from individual pages to the layout
-- DO NOT remove embedded selectors (US3) before verifying the global selector (Phase 2) is working — this avoids a period-less state for users
-- Commit after each phase checkpoint using Conventional Commits format
+- T016 reuses the `currentMonth` variable already in `+page.svelte` — no new derivation needed
+- T017 follows the same pattern as `expenses/+page.server.ts` and `incomes/+page.server.ts`
+- T018 can read the period from URL params server-side (preferred for SSR) or from the `selectedPeriod` store client-side; server-side is preferred for consistency
+- The `/resumen` page data remains static — only the heading changes to reflect the selected period

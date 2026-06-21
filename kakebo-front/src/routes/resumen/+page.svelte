@@ -1,6 +1,14 @@
+<script lang="ts">
+	export let data: { year: number; month: number };
+
+	const periodDate = new Date(data.year, data.month - 1);
+	const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(periodDate);
+	const currentMonth = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)} ${data.year}`;
+</script>
+
 <div class="mx-auto flex w-full max-w-7xl flex-col gap-6">
 	<section class="kakebo-surface rounded-2xl p-6">
-		<h1 class="text-2xl font-semibold text-[var(--kb-accent-strong)]">Resumen mensual</h1>
+		<h1 class="text-2xl font-semibold text-[var(--kb-accent-strong)]">Resumen mensual · {currentMonth}</h1>
 		<p class="kakebo-muted mt-2 text-sm">
 			Espacio para cerrar el mes: comparar plan vs. realidad y preparar el siguiente ciclo.
 		</p>

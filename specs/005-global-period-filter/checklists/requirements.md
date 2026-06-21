@@ -33,4 +33,5 @@
 
 - Spec derivada de la descripción del usuario y del análisis del código existente (feature 004 y estructura del layout).
 - Sin marcadores de aclaración — todos los aspectos relevantes tienen valores razonables por defecto o están claramente especificados.
-- Pantallas Diario y Resumen excluidas del alcance (no tienen datos dinámicos en la versión actual).
+- Pantalla Diario excluida del alcance (no tiene datos dinámicos).
+- Pantalla Resumen (`/resumen`) incluida en alcance para mostrar etiqueta del mes seleccionado (FR-010), aunque sus datos siguen siendo estáticos (clarificación 2026-06-21).

@@ -20,13 +20,14 @@ Actualmente el selector de año/mes está integrado dentro de cada pantalla de g
 
 - Selector de período global ubicado en el panel de navegación lateral.
 - Propagación del período seleccionado a todas las pantallas con datos: General, Gastos, Ingresos.
+- Visualización del mes seleccionado en la etiqueta de la sección "Resumen mensual" dentro de la pantalla General (`/`) y en el encabezado de la pantalla Resumen (`/resumen`).
 - Eliminación de los selectores de período embebidos en Gastos e Ingresos.
 - Comportamiento por defecto: mes y año en curso al primer acceso.
 
 ## Fuera de Alcance
 
 - Cambios en la lógica de negocio de filtrado (ya implementada en feature 004).
-- Pantallas sin datos dinámicos (Diario, Resumen con datos reales — actualmente son estáticas).
+- Pantalla Diario — no consume datos dinámicos y no requiere filtrado ni etiqueta de período.
 - Nuevas APIs de backend — el filtrado por año/mes ya existe.
 - Cambios en la estructura de datos o modelos de entidades.
 
@@ -99,6 +100,8 @@ Como usuario, quiero que las pantallas de Gastos e Ingresos no muestren su propi
 - **FR-006**: El sistema DEBE mantener el período seleccionado al navegar entre pantallas (persiste en la URL).
 - **FR-007**: Las pantallas de Gastos e Ingresos NO DEBEN mostrar su propio selector de período embebido.
 - **FR-008**: El selector global DEBE reflejar el período activo cuando el usuario accede con parámetros de período en la URL.
+- **FR-009**: La sección "Resumen mensual" dentro de la pantalla General (`/`) DEBE mostrar el nombre del mes seleccionado en su encabezado (e.g., "Resumen mensual · Junio 2026").
+- **FR-010**: La pantalla Resumen (`/resumen`) DEBE mostrar el nombre del mes y año seleccionados en su encabezado principal (e.g., "Resumen mensual · Junio 2026"), leyendo el período de los parámetros de URL.
 
 ### Non-Functional Requirements
 
@@ -111,6 +114,7 @@ Como usuario, quiero que las pantallas de Gastos e Ingresos no muestren su propi
 - **Período activo**: El año y mes actualmente seleccionados, representados como parámetros de URL (`?year=Y&month=M`).
 - **Panel de navegación lateral**: La barra de navegación persistente que contiene los vínculos a las secciones de la app y alojará el selector global.
 - **Pantallas con datos dinámicos**: General (`/`), Gastos (`/expenses`), Ingresos (`/incomes`) — pantallas que consumen datos filtrados por período.
+- **Pantalla con etiqueta de período**: Resumen (`/resumen`) — pantalla con datos estáticos que muestra el mes seleccionado en su encabezado.
 
 ## Success Criteria *(mandatory)*
 
@@ -122,10 +126,16 @@ Como usuario, quiero que las pantallas de Gastos e Ingresos no muestren su propi
 - **SC-004**: Las pantallas de Gastos e Ingresos no contienen selectores de período embebidos en el 100% de los casos tras este feature.
 - **SC-005**: El mes en curso es el período activo por defecto en el 100% de los accesos sin parámetros de URL.
 
+## Clarifications
+
+### Session 2026-06-21
+
+- Q: ¿A qué se refiere "Resumen mensual" cuando el usuario pide mostrar el mes seleccionado? → A: Ambas — la sección "Resumen mensual" dentro del General page (`/`) Y la pantalla `/resumen` (ruta separada).
+
 ## Assumptions
 
 - El backend ya soporta filtrado por año/mes en los endpoints de gastos e ingresos (implementado en feature 004).
 - La pantalla Diario no consume datos dinámicos y no requiere filtrado por período en esta iteración.
-- La pantalla Resumen actualmente usa datos estáticos/de ejemplo y no requiere filtrado por período en esta iteración.
+- La pantalla Resumen (`/resumen`) actualmente usa datos estáticos/de ejemplo — no se filtra el contenido por período, solo se muestra el mes seleccionado en el encabezado.
 - El panel de navegación lateral (AppRail) tiene espacio suficiente para alojar el selector sin afectar a la usabilidad de los vínculos de navegación.
 - El período seleccionado se propaga mediante parámetros de URL, lo que garantiza compatibilidad con SSR y navegación directa por URL.
