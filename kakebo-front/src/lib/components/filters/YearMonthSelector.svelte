@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	export let currentYear: number;
 	export let currentMonth: number;
-
-	const dispatch = createEventDispatcher<{ select: { year: number; month: number } }>();
+	export let onselect: ((data: { year: number; month: number }) => void) | undefined = undefined;
 
 	const START_YEAR = 2023;
 	const THIS_YEAR = new Date().getFullYear();
@@ -27,7 +24,7 @@
 	}
 
 	function selectMonth(year: number, month: number) {
-		dispatch('select', { year, month });
+		onselect?.({ year, month });
 	}
 </script>
 

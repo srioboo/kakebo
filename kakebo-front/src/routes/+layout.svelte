@@ -25,9 +25,8 @@
 		};
 	}
 
-	function handlePeriodSelect(e: CustomEvent<{ year: number; month: number }>) {
-		const { year, month } = e.detail;
-		goto(`${page.url.pathname}?year=${year}&month=${month}`);
+	async function handlePeriodSelect({ year, month }: { year: number; month: number }) {
+		await goto(`${page.url.pathname}?year=${year}&month=${month}`);
 	}
 
 	$effect(() => {
@@ -174,7 +173,7 @@
 					<YearMonthSelector
 						currentYear={getActivePeriod().year}
 						currentMonth={getActivePeriod().month}
-						on:select={handlePeriodSelect}
+						onselect={handlePeriodSelect}
 					/>
 				</div>
 
