@@ -1,9 +1,25 @@
 <script lang="ts">
-	export let data: { year: number; month: number };
+	import { formatCurrency, type Expense, type Income } from '$lib/api';
+
+	export let data: {
+		expenses?: Expense[];
+		incomes?: Income[];
+		year: number;
+		month: number;
+		error?: string;
+	};
 
 	const periodDate = new Date(data.year, data.month - 1);
 	const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(periodDate);
 	const currentMonth = `${monthName.charAt(0).toUpperCase()}${monthName.slice(1)} ${data.year}`;
+
+	const incomes = data.incomes ?? [];
+	const expenses = data.expenses ?? [];
+
+	const totalIncome = incomes.reduce((sum, item) => sum + item.amount, 0);
+	const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
+	const savings = totalIncome - totalExpenses;
+	const savingsRate = totalIncome === 0 ? 0 : Math.round((savings / totalIncome) * 1000) / 10;
 </script>
 
 <div class="mx-auto flex w-full max-w-7xl flex-col gap-6">
@@ -14,22 +30,28 @@
 		</p>
 	</section>
 
+	{#if data.error}
+		<div class="flex items-center gap-2 rounded-xl border border-[#d08d6d] bg-[#f8e8df] px-4 py-3 text-sm text-[#73422b]">
+			<span>{data.error}</span>
+		</div>
+	{/if}
+
 	<section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 		<article class="kakebo-surface rounded-xl p-4">
 			<p class="kakebo-muted text-xs uppercase tracking-wide">Ingresos</p>
-			<p class="mt-2 text-lg font-semibold">2.300,00 EUR</p>
+			<p class="mt-2 text-lg font-semibold">{formatCurrency(totalIncome)}</p>
 		</article>
 		<article class="kakebo-surface rounded-xl p-4">
 			<p class="kakebo-muted text-xs uppercase tracking-wide">Gastos</p>
-			<p class="mt-2 text-lg font-semibold">1.734,00 EUR</p>
+			<p class="mt-2 text-lg font-semibold">{formatCurrency(totalExpenses)}</p>
 		</article>
 		<article class="kakebo-surface rounded-xl p-4">
 			<p class="kakebo-muted text-xs uppercase tracking-wide">Ahorro</p>
-			<p class="mt-2 text-lg font-semibold">566,00 EUR</p>
+			<p class="mt-2 text-lg font-semibold">{formatCurrency(savings)}</p>
 		</article>
 		<article class="kakebo-surface rounded-xl p-4">
 			<p class="kakebo-muted text-xs uppercase tracking-wide">Tasa de ahorro</p>
-			<p class="mt-2 text-lg font-semibold">24,6%</p>
+			<p class="mt-2 text-lg font-semibold">{savingsRate.toFixed(1)}%</p>
 		</article>
 	</section>
 
